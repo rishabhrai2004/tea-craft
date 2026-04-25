@@ -19,9 +19,9 @@ export default function ProductShowcase() {
       .catch(() => {
         if (active) {
           setProducts([
-            { id: 1, title: 'Black Tea', price: 349, currency: 'INR', weight: '100g', img: '/assam_tea.png' },
-            { id: 2, title: 'Green Tea', price: 329, currency: 'INR', weight: '100g', img: '/kerala_tea.png' },
-            { id: 4, title: 'White Tea', price: 449, currency: 'INR', weight: '100g', img: '/darjeeling_tea.png' },
+            { id: 1, title: 'Black Tea', price: 349, currency: 'INR', weight: '100g', img: 'https://brewbuch.com/wp-content/uploads/2023/05/black-tea.jpg' },
+            { id: 2, title: 'Green Tea', price: 329, currency: 'INR', weight: '100g', img: 'https://brewbuch.com/wp-content/uploads/2023/05/green-tea.jpg' },
+            { id: 4, title: 'White Tea', price: 449, currency: 'INR', weight: '100g', img: 'https://brewbuch.com/wp-content/uploads/2023/05/white-tea-1024x683.jpg' },
           ]);
         }
       });

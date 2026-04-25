@@ -987,6 +987,7 @@ html.lenis, html.lenis body { height: auto; }
 .pcr-weight-select {
   display: grid;
   gap: 0.45rem;
+  margin-top: auto;
   margin-bottom: 1.2rem;
 }
 
@@ -1016,7 +1017,6 @@ html.lenis, html.lenis body { height: auto; }
 }
 
 .pcr-action-row {
-  margin-top: auto;
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -1049,279 +1049,7 @@ html.lenis, html.lenis body { height: auto; }
 
 .btn-solid-small:hover { background: var(--accent-green); }
 
-/* Journey Master (Split Screen Editorial) */
-.journey-master {
-  background: #0d0f0e;
-  color: #fff;
-  position: relative;
-  overflow: hidden;
-  padding-bottom: 20vh; /* Extra room for the final dissolve */
-}
 
-/* Section Fade Out */
-.journey-master::after {
-  content: '';
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  width: 100%;
-  height: 30vh;
-  background: linear-gradient(to bottom, transparent, #fff);
-  z-index: 10;
-  pointer-events: none;
-}
-
-.jm-container {
-  display: flex;
-  width: 100%;
-}
-
-.jm-left {
-  width: 100%; /* Full width */
-  position: relative;
-}
-
-/* Vertical Progress Indicator */
-.jm-progress-line-wrap {
-  position: absolute;
-  top: 0;
-  left: 3rem;
-  height: 100%;
-  width: 1px;
-  z-index: 10;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-}
-
-.jm-progress-line {
-  position: absolute;
-  top: 0;
-  bottom: 0;
-  width: 1px;
-  background: rgba(255,255,255,0.1);
-}
-
-.jm-dots {
-  position: relative;
-  height: 100%;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-around;
-  padding: 10vh 0;
-}
-
-.jm-dot {
-  width: 6px;
-  height: 6px;
-  border-radius: 50%;
-  background: rgba(255,255,255,0.2);
-  border: 1px solid transparent;
-  transition: all 0.3s ease;
-}
-
-.jm-dot.active {
-  background: var(--accent-green);
-  box-shadow: 0 0 10px var(--accent-green);
-  transform: scale(1.5);
-}
-
-/* Centered Falling Leaf */
-.jm-falling-leaf-wrap {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  pointer-events: none;
-  z-index: 20;
-}
-
-.jm-falling-leaf {
-  position: absolute;
-  top: 0;
-  left: 50%;
-  transform: translateX(-50%);
-  width: 120px;
-  height: 240px;
-  will-change: transform;
-  filter: drop-shadow(0 20px 40px rgba(0,0,0,0.5)); /* Stronger, softer shadow for depth */
-}
-
-.jm-leaf-svg {
-  width: 100%;
-  height: 100%;
-  opacity: 0.95;
-}
-
-/* Background and overlays now handled inline in JourneyMaster.jsx */
-
-.jm-row {
-  position: relative;
-  width: 100%;
-  height: 90vh;
-  overflow: hidden;
-  display: flex;
-  align-items: center;
-  border-bottom: 1px solid rgba(255,255,255,0.03);
-}
-
-.jm-content {
-  position: relative;
-  z-index: 3;
-  padding: 0 2rem;
-  width: 100%;
-  max-width: 900px;
-  margin: 0 auto;
-  text-align: center;
-}
-
-.jm-content-inner {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-}
-
-.jm-num {
-  font-family: 'Bodoni Moda', serif;
-  font-size: 14rem; /* Giant decorative number */
-  color: rgba(45, 74, 34, 0.08); /* Estate Green transparency */
-  line-height: 0.8;
-  margin-bottom: -4rem;
-  font-weight: 400;
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -55%);
-  z-index: -1;
-  pointer-events: none;
-  letter-spacing: 0;
-}
-
-.jm-content h3 {
-  font-size: 2.25rem;
-  text-transform: none; /* Sentence case as per example */
-  letter-spacing: 0;
-  color: #fff;
-  margin-bottom: 1.5rem;
-  font-weight: 500;
-  font-family: 'Bodoni Moda', serif;
-}
-
-.jm-content p {
-  font-size: 1.25rem;
-  color: rgba(255,255,255,0.6);
-  line-height: 1.6;
-  margin-bottom: 3rem;
-  max-width: 500px;
-  font-weight: 300;
-}
-
-.jm-plus-ring {
-  width: 50px;
-  height: 50px;
-  border: 1px solid rgba(255,255,255,0.2);
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  transition: all 0.4s cubic-bezier(0.23, 1, 0.32, 1);
-  cursor: pointer;
-}
-
-.jm-plus-ring:hover {
-  border-color: #fff;
-  background: rgba(255,255,255,0.05);
-  transform: scale(1.1);
-}
-
-.jm-plus {
-  color: #fff;
-  font-size: 1.5rem;
-  font-weight: 200;
-}
-
-/* Right Side - Sticky Panel */
-/* Remove old sidebar styles */
-
-.jm-kicker {
-  display: block;
-  font-size: 0.75rem;
-  text-transform: uppercase;
-  letter-spacing: 0.15em;
-  color: #8C9A5B;
-  margin-bottom: 1rem;
-}
-
-.jm-header h2 {
-  font-size: 2.5rem;
-  line-height: 1.2;
-  margin-bottom: 1.5rem;
-  color: #fff;
-}
-
-.jm-intro {
-  font-size: 0.95rem;
-  color: rgba(255,255,255,0.6);
-  line-height: 1.6;
-  margin-bottom: 4rem;
-}
-
-.jm-promises-title {
-  font-size: 0.8rem;
-  text-transform: uppercase;
-  letter-spacing: 0.15em;
-  color: #fff;
-  margin-bottom: 2rem;
-}
-
-.jm-promise-item {
-  display: flex;
-  align-items: flex-start;
-  gap: 1.5rem;
-  margin-bottom: 2rem;
-}
-
-.jm-icon {
-  color: #8C9A5B;
-  opacity: 0.8;
-  flex-shrink: 0;
-}
-
-.jm-pi-text h5 {
-  font-size: 0.85rem;
-  text-transform: uppercase;
-  letter-spacing: 0.1em;
-  margin-bottom: 0.5rem;
-  color: #fff;
-}
-
-.jm-pi-text p {
-  font-size: 0.85rem;
-  color: rgba(255,255,255,0.5);
-  line-height: 1.5;
-}
-
-.jm-footer {
-  margin-top: auto;
-  text-align: center;
-  padding-top: 3rem;
-  border-top: 1px solid rgba(255,255,255,0.1);
-}
-
-.jm-footer p {
-  font-size: 0.75rem;
-  text-transform: uppercase;
-  letter-spacing: 0.15em;
-  color: #8C9A5B;
-  margin-bottom: 1rem;
-}
-
-.jm-footer h3 {
-  font-size: 1.5rem;
-  letter-spacing: 0.2em;
-  color: #fff;
-}
 
 /* Experience (Vantara Immersion) */
 .experience-section {
@@ -2428,7 +2156,7 @@ html.lenis, html.lenis body { height: auto; }
   }
 
   .hero-section {
-    padding: 7rem 1.25rem 3rem;
+    padding: 12.5rem 1.25rem 3rem;
   }
 
   .hero-grid {
@@ -2532,6 +2260,8 @@ html.lenis, html.lenis body { height: auto; }
     flex-wrap: wrap;
     gap: 1rem;
   }
+
+
 }
 
 /* Mobile Menu Styles */
@@ -2640,6 +2370,10 @@ html.lenis, html.lenis body { height: auto; }
     height: 50vh;
   }
 
+  .hero-section {
+    padding-top: 12rem;
+  }
+
   .hero-image-front,
   .bs-image-wrapper,
   .bs-image-secondary,
@@ -2697,4 +2431,6 @@ html.lenis, html.lenis body { height: auto; }
     justify-content: center;
     min-height: 2.75rem;
   }
+
+
 }

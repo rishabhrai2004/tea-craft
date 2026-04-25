@@ -10,6 +10,7 @@ import LoginDrawer from './components/LoginDrawer';
 import Hero from './components/Hero';
 import BrandStory from './components/BrandStory';
 import Sourcing from './components/Sourcing';
+
 import ProductDiscovery from './components/ProductDiscovery';
 import Experience from './components/Experience';
 import Gifting from './components/Gifting';
@@ -97,6 +98,7 @@ function App() {
           <Hero />
           <BrandStory />
           <Sourcing />
+
           <ProductDiscovery />
           <Experience />
           <Gifting />
