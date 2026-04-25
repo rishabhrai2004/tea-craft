@@ -50,7 +50,7 @@ export default function ProductDiscovery() {
     <section className="product-discovery" id="shop">
       <div className="section-header-split">
         <div>
-          <h2 className="section-title">Curated Selection</h2>
+          <h2 className="section-title">The Tea Library</h2>
           <p className="section-desc">Fifteen real tea styles with leaf photography inspired by BrewBuch's tea guide.</p>
         </div>
         <button type="button" className="btn-text" onClick={() => setShowAll((current) => !current)}>
