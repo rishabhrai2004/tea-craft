@@ -5,13 +5,16 @@ export const COUPONS = [
     type: 'percent',
     value: 10,
     minSubtotal: 0,
+    applyOn: 'total',
   },
   {
     code: 'FIRST15',
     label: 'First Steep 15',
     type: 'percent',
     value: 15,
-    minSubtotal: 1499,
+    minSubtotal: 899,
+    applyOn: 'subtotal',
+    oneTimePerCustomer: true,
   },
   {
     code: 'ESTATE20',
@@ -19,6 +22,7 @@ export const COUPONS = [
     type: 'percent',
     value: 20,
     minSubtotal: 4999,
+    applyOn: 'subtotal',
   },
 ];
 
@@ -31,21 +35,21 @@ export function getCoupon(code) {
   return COUPONS.find((coupon) => coupon.code === normalizedCode) || null;
 }
 
-export function calculateCouponDiscount(coupon, subtotal) {
-  const normalizedSubtotal = Math.max(0, Number(subtotal) || 0);
+export function calculateCouponDiscount(coupon, amount) {
+  const normalizedAmount = Math.max(0, Number(amount) || 0);
 
-  if (!coupon || normalizedSubtotal <= 0) {
+  if (!coupon || normalizedAmount <= 0) {
     return 0;
   }
 
   if (coupon.type === 'percent') {
-    return Math.round((normalizedSubtotal * coupon.value) / 100);
+    return Math.round((normalizedAmount * coupon.value) / 100);
   }
 
-  return Math.round(Math.min(normalizedSubtotal, Number(coupon.value) || 0));
+  return Math.round(Math.min(normalizedAmount, Number(coupon.value) || 0));
 }
 
-export function validateCoupon(code, subtotal) {
+export function validateCoupon(code, subtotal, context = {}) {
   const normalizedCode = normalizeCouponCode(code);
 
   if (!normalizedCode) {
@@ -65,6 +69,14 @@ export function validateCoupon(code, subtotal) {
   }
 
   const normalizedSubtotal = Math.max(0, Number(subtotal) || 0);
+
+  if (coupon.oneTimePerCustomer && context.first15AlreadyUsed) {
+    return {
+      valid: false,
+      coupon,
+      message: `${coupon.code} can be used only once per account.`,
+    };
+  }
 
   if (normalizedSubtotal < coupon.minSubtotal) {
     return {

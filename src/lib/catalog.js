@@ -1,5 +1,21 @@
 export const DEFAULT_CURRENCY = 'INR';
 
+function getPackDiscountRate(multiplier) {
+  if (multiplier >= 10) {
+    return 0.1;
+  }
+
+  if (multiplier >= 5) {
+    return 0.06;
+  }
+
+  if (multiplier >= 2) {
+    return 0.02;
+  }
+
+  return 0;
+}
+
 export function formatCurrency(value, currency = DEFAULT_CURRENCY) {
   const resolvedCurrency = currency || DEFAULT_CURRENCY;
 
@@ -11,21 +27,50 @@ export function formatCurrency(value, currency = DEFAULT_CURRENCY) {
 }
 
 export function getWeightOptions(product = {}) {
-  if (Array.isArray(product.weightOptions) && product.weightOptions.length > 0) {
-    return product.weightOptions.map((option) => ({
+  const options = Array.isArray(product.weightOptions) && product.weightOptions.length > 0
+    ? product.weightOptions.map((option) => ({
       label: option.label,
       grams: Number(option.grams) || Number.parseInt(option.label, 10) || 0,
       price: Number(option.price) || 0,
-    }));
-  }
-
-  return [
-    {
+    }))
+    : [
+      {
       label: product.weight || '100g',
       grams: Number.parseInt(product.weight || '100', 10) || 100,
       price: Number(product.price ?? 0),
-    },
-  ];
+      },
+    ];
+
+  const normalized = options
+    .filter((option) => option.grams > 0)
+    .sort((a, b) => a.grams - b.grams);
+
+  if (!normalized.length) {
+    return [{
+      label: product.weight || '100g',
+      grams: Number.parseInt(product.weight || '100', 10) || 100,
+      price: Number(product.price ?? 0),
+    }];
+  }
+
+  const baseOption = normalized[0];
+  const baseUnitPrice = baseOption.price / Math.max(1, baseOption.grams);
+
+  return normalized.map((option, index) => {
+    if (index === 0) {
+      return option;
+    }
+
+    const multiplier = option.grams / Math.max(1, baseOption.grams);
+    const discountRate = getPackDiscountRate(multiplier);
+    const linearPrice = baseUnitPrice * option.grams;
+    const encouragedPrice = Math.round(linearPrice * (1 - discountRate));
+
+    return {
+      ...option,
+      price: Math.min(option.price, Math.max(1, encouragedPrice)),
+    };
+  });
 }
 
 export function getDefaultWeightOption(product = {}) {

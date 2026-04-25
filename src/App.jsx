@@ -3,6 +3,7 @@ import Lenis from 'lenis';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { CartProvider } from './context/CartContext';
+import { fetchAuthSession, logoutAccount } from './lib/api';
 import Header from './components/Header';
 import CartDrawer from './components/CartDrawer';
 import SearchDrawer from './components/SearchDrawer';
@@ -21,25 +22,33 @@ import './index.css';
 
 gsap.registerPlugin(ScrollTrigger);
 
-const ACCOUNT_STORAGE_KEY = 'teaCraft.account.v1';
-
-function readStoredAccount() {
-  if (typeof window === 'undefined') {
-    return null;
-  }
-
-  try {
-    const raw = window.localStorage.getItem(ACCOUNT_STORAGE_KEY);
-    return raw ? JSON.parse(raw) : null;
-  } catch {
-    return null;
-  }
-}
-
 function App() {
   const [isSearchOpen, setIsSearchOpen] = useState(false);
   const [isLoginOpen, setIsLoginOpen] = useState(false);
-  const [account, setAccount] = useState(() => readStoredAccount());
+  const [account, setAccount] = useState(null);
+
+  useEffect(() => {
+    let active = true;
+
+    async function bootstrapSession() {
+      try {
+        const payload = await fetchAuthSession();
+        if (active) {
+          setAccount(payload.authenticated ? payload.user : null);
+        }
+      } catch {
+        if (active) {
+          setAccount(null);
+        }
+      }
+    }
+
+    bootstrapSession();
+
+    return () => {
+      active = false;
+    };
+  }, []);
 
   useEffect(() => {
     const lenis = new Lenis({
@@ -68,16 +77,15 @@ function App() {
 
   const handleLogin = (nextAccount) => {
     setAccount(nextAccount);
-    window.localStorage.setItem(ACCOUNT_STORAGE_KEY, JSON.stringify(nextAccount));
   };
 
-  const handleLogout = () => {
+  const handleLogout = async () => {
+    await logoutAccount();
     setAccount(null);
-    window.localStorage.removeItem(ACCOUNT_STORAGE_KEY);
   };
 
   return (
-    <CartProvider>
+    <CartProvider account={account} onRequireAuth={() => setIsLoginOpen(true)}>
       <div className="app-main">
         <Header
           onSearchClick={() => setIsSearchOpen(true)}

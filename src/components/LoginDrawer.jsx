@@ -1,9 +1,14 @@
 import { useEffect, useState } from 'react';
 import { LogOut, ShieldCheck, User, X } from 'lucide-react';
+import { loginAccount, registerAccount } from '../lib/api';
+import { useCart } from '../context/cart-store';
 
 export default function LoginDrawer({ isOpen, onClose, account, onLogin, onLogout }) {
+  const { cartItems } = useCart();
   const [form, setForm] = useState({ name: '', email: '', password: '' });
+  const [mode, setMode] = useState('login');
   const [error, setError] = useState('');
+  const [submitting, setSubmitting] = useState(false);
 
   useEffect(() => {
     if (!isOpen) {
@@ -20,7 +25,7 @@ export default function LoginDrawer({ isOpen, onClose, account, onLogin, onLogou
     return () => window.removeEventListener('keydown', handleKeyDown);
   }, [isOpen, onClose]);
 
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault();
     const email = form.email.trim().toLowerCase();
 
@@ -29,23 +34,47 @@ export default function LoginDrawer({ isOpen, onClose, account, onLogin, onLogou
       return;
     }
 
-    if (form.password.trim().length < 4) {
-      setError('Password must be at least 4 characters.');
+    if (form.password.trim().length < 6) {
+      setError('Password must be at least 6 characters.');
       return;
     }
 
-    onLogin({
-      name: form.name.trim() || email.split('@')[0],
-      email,
-      joinedAt: new Date().toISOString(),
-    });
-    setForm({ name: '', email: '', password: '' });
+    if (mode === 'register' && !form.name.trim()) {
+      setError('Enter your name to create an account.');
+      return;
+    }
+
+    setSubmitting(true);
     setError('');
-    onClose();
+
+    try {
+      const authPayload = {
+        name: form.name.trim(),
+        email,
+        password: form.password,
+        mergeCart: cartItems.map((item) => ({
+          id: item.id,
+          weight: item.weight,
+          quantity: item.quantity,
+        })),
+      };
+
+      const response = mode === 'register'
+        ? await registerAccount(authPayload)
+        : await loginAccount(authPayload);
+
+      onLogin(response.user);
+      setForm({ name: '', email: '', password: '' });
+      onClose();
+    } catch (apiError) {
+      setError(apiError.message || 'Unable to continue. Please try again.');
+    } finally {
+      setSubmitting(false);
+    }
   };
 
-  const handleLogout = () => {
-    onLogout();
+  const handleLogout = async () => {
+    await onLogout();
     onClose();
   };
 
@@ -78,17 +107,20 @@ export default function LoginDrawer({ isOpen, onClose, account, onLogin, onLogou
             <form className="login-form" onSubmit={handleSubmit}>
               <div className="account-avatar"><User size={28} /></div>
               <p className="order-kicker">Private estate account</p>
-              <h4>Enter the archive</h4>
+              <h4>{mode === 'register' ? 'Create your account' : 'Enter the archive'}</h4>
 
-              <label className="cart-field">
-                <span>Name</span>
-                <input
-                  type="text"
-                  value={form.name}
-                  onChange={(event) => setForm((current) => ({ ...current, name: event.target.value }))}
-                  placeholder="Your name"
-                />
-              </label>
+              {mode === 'register' && (
+                <label className="cart-field">
+                  <span>Name</span>
+                  <input
+                    type="text"
+                    value={form.name}
+                    onChange={(event) => setForm((current) => ({ ...current, name: event.target.value }))}
+                    placeholder="Your name"
+                    required
+                  />
+                </label>
+              )}
 
               <label className="cart-field">
                 <span>Email</span>
@@ -107,13 +139,30 @@ export default function LoginDrawer({ isOpen, onClose, account, onLogin, onLogou
                   type="password"
                   value={form.password}
                   onChange={(event) => setForm((current) => ({ ...current, password: event.target.value }))}
-                  placeholder="Minimum 4 characters"
+                  placeholder="Minimum 6 characters"
                   required
                 />
               </label>
 
               {error && <p className="cart-error login-error">{error}</p>}
-              <button type="submit" className="btn-primary full-width">Login</button>
+              <button type="submit" className="btn-primary full-width" disabled={submitting}>
+                {submitting
+                  ? 'Please wait...'
+                  : mode === 'register'
+                    ? 'Create Account'
+                    : 'Login'}
+              </button>
+              <button
+                type="button"
+                className="btn-text"
+                onClick={() => {
+                  setMode((current) => (current === 'login' ? 'register' : 'login'));
+                  setError('');
+                }}
+                disabled={submitting}
+              >
+                {mode === 'login' ? 'New here? Create account' : 'Already a member? Sign in'}
+              </button>
             </form>
           )}
         </div>

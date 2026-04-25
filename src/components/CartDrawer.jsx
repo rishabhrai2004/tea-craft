@@ -5,7 +5,23 @@ import { calculateCouponDiscount, validateCoupon } from '../../shared/coupons';
 import { X, Plus, Minus, Trash2 } from 'lucide-react';
 
 export default function CartDrawer() {
-  const { isCartOpen, closeCart, cartItems, removeFromCart, updateQuantity, total, checkoutCart, isCheckingOut, checkoutError, lastOrder } = useCart();
+  const {
+    isCartOpen,
+    closeCart,
+    cartItems,
+    removeFromCart,
+    updateQuantity,
+    total,
+    checkoutCart,
+    checkoutError,
+    lastOrder,
+    isAuthenticated,
+    cartSummary,
+    refreshCart,
+    isCheckingOut,
+    isMutatingCart,
+    isSyncingCart,
+  } = useCart();
   const [customer, setCustomer] = useState({ name: '', email: '' });
   const [formError, setFormError] = useState('');
   const [couponCode, setCouponCode] = useState('');
@@ -29,15 +45,48 @@ export default function CartDrawer() {
   const totalItems = cartItems.reduce((sum, item) => sum + item.quantity, 0);
   const cartCurrency = cartItems[0]?.currency || lastOrder?.currency || 'INR';
   const freeShippingTarget = 2500;
-  const appliedCouponValidation = appliedCoupon ? validateCoupon(appliedCoupon.code, total) : null;
-  const activeCoupon = appliedCouponValidation?.valid ? appliedCouponValidation.coupon : null;
-  const discount = activeCoupon ? calculateCouponDiscount(activeCoupon, total) : 0;
+  const backendCouponStatus = isAuthenticated ? cartSummary?.couponStatus || null : null;
+  const backendCoupon = isAuthenticated ? cartSummary?.coupon || null : null;
+  const appliedCouponValidation = !isAuthenticated && appliedCoupon ? validateCoupon(appliedCoupon.code, total) : null;
+  const activeCoupon = isAuthenticated
+    ? backendCoupon
+    : (appliedCouponValidation?.valid ? appliedCouponValidation.coupon : null);
+  const discount = isAuthenticated
+    ? Number(cartSummary?.discount || 0)
+    : (activeCoupon ? calculateCouponDiscount(activeCoupon, total) : 0);
   const discountedSubtotal = Math.max(0, total - discount);
   const freeShippingRemaining = Math.max(0, freeShippingTarget - discountedSubtotal);
   const freeShippingProgress = Math.min(100, (discountedSubtotal / freeShippingTarget) * 100);
   const getItemKey = (item) => item.cartKey ?? `${item.id}:${item.weight || 'default'}`;
+  const isBusy = isCheckingOut || isMutatingCart || isSyncingCart;
+  const activeCouponCode = activeCoupon?.code;
 
-  const handleApplyCoupon = () => {
+  useEffect(() => {
+    if (isAuthenticated) {
+      setCouponCode(activeCouponCode || '');
+    }
+  }, [activeCouponCode, isAuthenticated]);
+
+  const handleApplyCoupon = async () => {
+    if (isBusy) {
+      return;
+    }
+
+    if (isAuthenticated) {
+      try {
+        const payload = await refreshCart(couponCode.trim());
+        const status = payload.cart?.couponStatus || null;
+        setCouponMessage(status?.message || 'Coupon updated.');
+
+        if (!status?.valid) {
+          setAppliedCoupon(null);
+        }
+      } catch (error) {
+        setCouponMessage(error.message || 'Unable to apply coupon right now.');
+      }
+      return;
+    }
+
     const validation = validateCoupon(couponCode, total);
 
     if (!validation.valid) {
@@ -51,17 +100,33 @@ export default function CartDrawer() {
     setCouponMessage(validation.message);
   };
 
-  const handleRemoveCoupon = () => {
+  const handleRemoveCoupon = async () => {
+    if (isBusy) {
+      return;
+    }
+
+    if (isAuthenticated) {
+      try {
+        const payload = await refreshCart('');
+        const status = payload.cart?.couponStatus || null;
+        setCouponMessage(status?.message || 'Coupon removed.');
+      } catch (error) {
+        setCouponMessage(error.message || 'Unable to remove coupon right now.');
+      }
+    }
+
     setAppliedCoupon(null);
     setCouponCode('');
-    setCouponMessage('');
+    if (!isAuthenticated) {
+      setCouponMessage('');
+    }
   };
 
   const handleCheckout = async (event) => {
     event.preventDefault();
     const email = customer.email.trim();
 
-    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+    if (!isAuthenticated && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
       setFormError('Enter a valid email so we can send your order details.');
       return;
     }
@@ -70,8 +135,8 @@ export default function CartDrawer() {
       setFormError('');
       await checkoutCart({
         name: customer.name.trim() || 'Guest Collector',
-        email,
-        couponCode: activeCoupon?.code,
+        email: isAuthenticated ? undefined : email,
+        couponCode: activeCouponCode,
       });
     } catch {
       // Error state is shown from the cart context.
@@ -111,11 +176,11 @@ export default function CartDrawer() {
                   
                   <div className="cart-item-actions">
                     <div className="qty-selector">
-                      <button type="button" onClick={() => updateQuantity(getItemKey(item), -1)} aria-label={`Decrease ${item.title} ${item.weight} quantity`}><Minus size={14} /></button>
+                      <button type="button" onClick={() => updateQuantity(getItemKey(item), -1)} aria-label={`Decrease ${item.title} ${item.weight} quantity`} disabled={isBusy}><Minus size={14} /></button>
                       <span>{item.quantity}</span>
-                      <button type="button" onClick={() => updateQuantity(getItemKey(item), 1)} aria-label={`Increase ${item.title} ${item.weight} quantity`}><Plus size={14} /></button>
+                      <button type="button" onClick={() => updateQuantity(getItemKey(item), 1)} aria-label={`Increase ${item.title} ${item.weight} quantity`} disabled={isBusy}><Plus size={14} /></button>
                     </div>
-                    <button type="button" onClick={() => removeFromCart(getItemKey(item))} className="remove-btn" aria-label={`Remove ${item.title} ${item.weight}`}><Trash2 size={16}/></button>
+                    <button type="button" onClick={() => removeFromCart(getItemKey(item))} className="remove-btn" aria-label={`Remove ${item.title} ${item.weight}`} disabled={isBusy}><Trash2 size={16}/></button>
                   </div>
                 </div>
               </div>
@@ -151,8 +216,9 @@ export default function CartDrawer() {
                   type="email"
                   value={customer.email}
                   onChange={(event) => setCustomer((current) => ({ ...current, email: event.target.value }))}
-                  placeholder="you@example.com"
-                  required
+                  placeholder={isAuthenticated ? 'Using your signed-in account email' : 'you@example.com'}
+                  required={!isAuthenticated}
+                  disabled={isAuthenticated}
                 />
               </label>
             </div>
@@ -165,17 +231,19 @@ export default function CartDrawer() {
                     value={couponCode}
                     onChange={(event) => setCouponCode(event.target.value)}
                     placeholder="CRAFT10"
-                    disabled={Boolean(appliedCoupon)}
+                    disabled={isBusy || (Boolean(appliedCoupon) && !isAuthenticated) || Boolean(activeCouponCode)}
                   />
-                  {appliedCoupon ? (
-                    <button type="button" className="btn-text" onClick={handleRemoveCoupon}>Remove</button>
+                  {(isAuthenticated ? Boolean(activeCouponCode) : Boolean(appliedCoupon)) ? (
+                    <button type="button" className="btn-text" onClick={handleRemoveCoupon} disabled={isBusy}>Remove</button>
                   ) : (
-                    <button type="button" className="btn-text" onClick={handleApplyCoupon}>Apply</button>
+                    <button type="button" className="btn-text" onClick={handleApplyCoupon} disabled={isBusy || !couponCode.trim()}>Apply</button>
                   )}
                 </div>
               </label>
-              <p className={`cart-coupon-note ${activeCoupon ? 'success' : ''}`}>
-                {appliedCouponValidation && !appliedCouponValidation.valid ? appliedCouponValidation.message : couponMessage || 'Try CRAFT10, FIRST15, or ESTATE20.'}
+              <p className={`cart-coupon-note ${activeCouponCode ? 'success' : ''}`}>
+                {isAuthenticated
+                  ? backendCouponStatus?.message || couponMessage || 'Try CRAFT10, FIRST15, or ESTATE20.'
+                  : (appliedCouponValidation && !appliedCouponValidation.valid ? appliedCouponValidation.message : couponMessage || 'Try CRAFT10, FIRST15, or ESTATE20.')}
               </p>
             </div>
             <div className="cart-total">
@@ -184,12 +252,12 @@ export default function CartDrawer() {
             </div>
             {discount > 0 && (
               <div className="cart-total cart-discount">
-                <span>{activeCoupon.code}</span>
+                <span>{activeCouponCode}</span>
                 <span>-{formatCurrency(discount, cartCurrency)}</span>
               </div>
             )}
             <p className="cart-taxes">Shipping & taxes calculated at checkout.</p>
-            <button type="submit" className="btn-primary full-width" disabled={isCheckingOut}>
+            <button type="submit" className="btn-primary full-width" disabled={isBusy}>
               {isCheckingOut ? 'Confirming Order...' : 'Proceed to Checkout'}
             </button>
           </form>
