@@ -22,8 +22,6 @@ export default function CartDrawer() {
     isMutatingCart,
     isSyncingCart,
   } = useCart();
-  const [customer, setCustomer] = useState({ name: '', email: '' });
-  const [formError, setFormError] = useState('');
   const [couponCode, setCouponCode] = useState('');
   const [appliedCoupon, setAppliedCoupon] = useState(null);
   const [couponMessage, setCouponMessage] = useState('');
@@ -124,18 +122,9 @@ export default function CartDrawer() {
 
   const handleCheckout = async (event) => {
     event.preventDefault();
-    const email = customer.email.trim();
-
-    if (!isAuthenticated && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
-      setFormError('Enter a valid email so we can send your order details.');
-      return;
-    }
 
     try {
-      setFormError('');
       await checkoutCart({
-        name: customer.name.trim() || 'Guest Collector',
-        email: isAuthenticated ? undefined : email,
         couponCode: activeCouponCode,
       });
     } catch {
@@ -188,7 +177,7 @@ export default function CartDrawer() {
           )}
         </div>
         
-        {(checkoutError || formError) && <p className="cart-error">{checkoutError || formError}</p>}
+        {checkoutError && <p className="cart-error">{checkoutError}</p>}
 
         {cartItems.length > 0 && !lastOrder && (
           <form className="cart-footer" onSubmit={handleCheckout}>
@@ -199,28 +188,6 @@ export default function CartDrawer() {
               <div className="cart-progress-track">
                 <span style={{ width: `${freeShippingProgress}%` }}></span>
               </div>
-            </div>
-            <div className="cart-checkout-form">
-              <label className="cart-field">
-                <span>Name</span>
-                <input
-                  type="text"
-                  value={customer.name}
-                  onChange={(event) => setCustomer((current) => ({ ...current, name: event.target.value }))}
-                  placeholder="Guest Collector"
-                />
-              </label>
-              <label className="cart-field">
-                <span>Email</span>
-                <input
-                  type="email"
-                  value={customer.email}
-                  onChange={(event) => setCustomer((current) => ({ ...current, email: event.target.value }))}
-                  placeholder={isAuthenticated ? 'Using your signed-in account email' : 'you@example.com'}
-                  required={!isAuthenticated}
-                  disabled={isAuthenticated}
-                />
-              </label>
             </div>
             <div className="cart-coupon">
               <label className="cart-field">
