@@ -9,9 +9,8 @@ import SearchDrawer from './components/SearchDrawer';
 import LoginDrawer from './components/LoginDrawer';
 import Hero from './components/Hero';
 import BrandStory from './components/BrandStory';
-import Sourcing from './components/Sourcing';
+import JourneyMaster from './components/JourneyMaster';
 import ProductDiscovery from './components/ProductDiscovery';
-import Experience from './components/Experience';
 import Gifting from './components/Gifting';
 import SocialProof from './components/SocialProof';
 import Newsletter from './components/Newsletter';
@@ -96,9 +95,8 @@ function App() {
         <main>
           <Hero />
           <BrandStory />
-          <Sourcing />
+          <JourneyMaster />
           <ProductDiscovery />
-          <Experience />
           <Gifting />
           <SocialProof />
           <Newsletter />
