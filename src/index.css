@@ -44,6 +44,14 @@ body {
 
 html {
   background: var(--bg-primary);
+  overflow-x: hidden;
+}
+
+img,
+video,
+canvas,
+svg {
+  max-width: 100%;
 }
 
 body::before {
@@ -181,6 +189,8 @@ html.lenis, html.lenis body { height: auto; }
   align-items: center;
   justify-content: center;
   position: relative;
+  min-width: 2.5rem;
+  min-height: 2.5rem;
 }
 
 .btn-primary:focus-visible,
@@ -306,10 +316,7 @@ html.lenis, html.lenis body { height: auto; }
 /* Smart Cart Drawer */
 .cart-overlay {
   position: fixed;
-  top: 0;
-  left: 0;
-  width: 100vw;
-  height: 100vh;
+  inset: 0;
   background: rgba(0,0,0,0.4);
   z-index: 999;
   opacity: 0;
@@ -328,7 +335,7 @@ html.lenis, html.lenis body { height: auto; }
   right: 0;
   width: 100%;
   max-width: 450px;
-  height: 100vh;
+  height: 100dvh;
   background: var(--bg-primary);
   z-index: 1000;
   transform: translateX(100%);
@@ -567,7 +574,8 @@ html.lenis, html.lenis body { height: auto; }
 /* Hybrid Hero (Clarity + Depth) */
 .hero-section {
   position: relative;
-  min-height: 100vh;
+  min-height: 100svh;
+  min-height: 100dvh;
   padding: 8rem 4rem 4rem;
   display: flex;
   align-items: center;
@@ -2137,14 +2145,60 @@ html.lenis, html.lenis body { height: auto; }
 @media (max-width: 900px) {
   .header-wrapper {
     padding: 0;
+    padding-top: env(safe-area-inset-top);
+  }
+
+  .announcement-bar {
+    padding-top: 0.55rem;
+    padding-bottom: 0.55rem;
+    padding-left: max(0.75rem, env(safe-area-inset-left));
+    padding-right: max(0.75rem, env(safe-area-inset-right));
+    font-size: 0.64rem;
+    letter-spacing: 0.11em;
+    border-radius: 0;
+  }
+
+  .announcement-bar p {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+    gap: 0.3rem;
+    line-height: 1.35;
   }
 
   .header-main {
-    padding: 1rem 1.25rem;
+    margin-top: 0;
+    padding-top: 0.9rem;
+    padding-bottom: 0.9rem;
+    padding-left: max(1rem, env(safe-area-inset-left));
+    padding-right: max(1rem, env(safe-area-inset-right));
+    border-radius: 0;
+    border-left: none;
+    border-right: none;
   }
 
   .header-main.scrolled {
-    padding: 0.75rem 1.25rem;
+    padding-top: 0.75rem;
+    padding-bottom: 0.75rem;
+    padding-left: max(1rem, env(safe-area-inset-left));
+    padding-right: max(1rem, env(safe-area-inset-right));
+  }
+
+  .header-left,
+  .header-right {
+    flex: 0 0 auto;
+    gap: 0.9rem;
+  }
+
+  .header-center {
+    flex: 1;
+    min-width: 0;
+  }
+
+  .logo-main {
+    font-size: clamp(1.2rem, 4.8vw, 1.55rem);
+    letter-spacing: 0.06em;
   }
 
   .header-nav {
@@ -2157,10 +2211,20 @@ html.lenis, html.lenis body { height: auto; }
 
   .hero-section {
     padding: 12.5rem 1.25rem 3rem;
+    min-height: 92svh;
+    min-height: 92dvh;
   }
 
   .hero-grid {
     gap: 3rem;
+  }
+
+  .hero-content {
+    text-align: center;
+  }
+
+  .hero-kicker {
+    margin-bottom: 1.3rem;
   }
 
   .hero-heading {
@@ -2175,6 +2239,7 @@ html.lenis, html.lenis body { height: auto; }
   }
 
   .hero-cta-group {
+    justify-content: center;
     align-items: center;
   }
 
@@ -2184,8 +2249,26 @@ html.lenis, html.lenis body { height: auto; }
   }
 
   .hero-visual {
-    height: 55vh;
+    height: auto;
+    min-height: 0;
+    flex-direction: column;
+    gap: 1rem;
     margin-top: 2rem;
+  }
+
+  .hero-image-front {
+    width: min(100%, 520px);
+    height: auto;
+    max-height: 58vh;
+  }
+
+  .hero-floating-card {
+    position: static;
+    width: min(100%, 520px);
+  }
+
+  .scroll-indicator {
+    display: none;
   }
 
   .brand-story,
@@ -2261,16 +2344,111 @@ html.lenis, html.lenis body { height: auto; }
     gap: 1rem;
   }
 
+  .gifting-content {
+    padding: 2.25rem 1.5rem;
+  }
 
+  .review-card {
+    padding: 1.5rem;
+  }
+
+  .footer-top {
+    gap: 2.5rem;
+    margin-bottom: 3rem;
+    padding-bottom: 2.5rem;
+  }
+
+  .mobile-menu-drawer {
+    width: min(92vw, 360px);
+    padding: 1.5rem 1.25rem;
+    padding-bottom: calc(1.5rem + env(safe-area-inset-bottom));
+  }
+
+  .mobile-menu-header {
+    margin-bottom: 2.25rem;
+  }
+
+  .mobile-menu-nav {
+    gap: 1.2rem;
+  }
+
+  .mobile-menu-nav a,
+  .mobile-account-link {
+    font-size: clamp(1.25rem, 6.5vw, 1.65rem);
+    line-height: 1.2;
+  }
+
+  .mobile-menu-footer {
+    font-size: 0.8rem;
+  }
+
+  .search-meta {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .search-result-card {
+    grid-template-columns: 92px 1fr;
+  }
+
+  .search-result-content {
+    gap: 0.75rem;
+  }
+
+  .cart-progress-copy {
+    gap: 0.5rem;
+    flex-wrap: wrap;
+  }
+
+
+}
+
+@media (max-width: 768px) {
+  .hero-section {
+    padding-top: 11.5rem;
+  }
+
+  .hero-heading {
+    font-size: clamp(2.6rem, 9.2vw, 3.25rem);
+  }
+
+  .hero-metrics {
+    grid-template-columns: 1fr;
+    width: min(100%, 420px);
+  }
+
+  .section-title,
+  .gifting-title,
+  .exp-title,
+  .nl-title {
+    font-size: clamp(2.25rem, 7vw, 2.9rem);
+  }
+
+  .gifting-content {
+    padding: 2rem 1.25rem;
+  }
+
+  .nl-form {
+    width: 100%;
+  }
+
+  .cart-drawer,
+  .cart-drawer.search-drawer,
+  .cart-drawer.login-drawer {
+    max-width: none;
+    width: 100%;
+  }
+
+  .footer-bottom {
+    text-align: center;
+    gap: 0.8rem;
+  }
 }
 
 /* Mobile Menu Styles */
 .mobile-menu-overlay {
   position: fixed;
-  top: 0;
-  left: 0;
-  width: 100vw;
-  height: 100vh;
+  inset: 0;
   background: rgba(0,0,0,0.3);
   backdrop-filter: blur(4px);
   z-index: 998;
@@ -2290,7 +2468,7 @@ html.lenis, html.lenis body { height: auto; }
   left: 0;
   width: 85%;
   max-width: 380px;
-  height: 100vh;
+  height: 100dvh;
   background: var(--bg-primary);
   z-index: 999;
   transform: translateX(-100%);
@@ -2353,6 +2531,33 @@ html.lenis, html.lenis body { height: auto; }
 }
 
 @media (max-width: 560px) {
+  body {
+    background-attachment: scroll;
+  }
+
+  .icon-btn {
+    min-width: 2.3rem;
+    min-height: 2.3rem;
+  }
+
+  .header-main,
+  .header-main.scrolled {
+    padding-top: 0.72rem;
+    padding-bottom: 0.72rem;
+    padding-left: max(0.78rem, env(safe-area-inset-left));
+    padding-right: max(0.78rem, env(safe-area-inset-right));
+  }
+
+  .header-left,
+  .header-right {
+    gap: 0.55rem;
+  }
+
+  .logo-main {
+    font-size: clamp(1rem, 5vw, 1.2rem);
+    letter-spacing: 0.05em;
+  }
+
   .hero-section,
   .brand-story,
   .product-discovery,
@@ -2367,11 +2572,11 @@ html.lenis, html.lenis body { height: auto; }
   }
 
   .hero-visual {
-    height: 50vh;
+    margin-top: 1.35rem;
   }
 
   .hero-section {
-    padding-top: 12rem;
+    padding-top: 10.5rem;
   }
 
   .hero-image-front,
@@ -2385,10 +2590,7 @@ html.lenis, html.lenis body { height: auto; }
   }
 
   .hero-floating-card {
-    left: 0.75rem;
-    right: 0.75rem;
-    bottom: 1rem;
-    padding: 1.25rem;
+    padding: 1rem;
   }
 
   .btn-primary,
@@ -2404,14 +2606,40 @@ html.lenis, html.lenis body { height: auto; }
   }
 
   .hero-heading {
-    font-size: 3.05rem;
+    font-size: 2.35rem;
+    line-height: 1.08;
   }
 
   .section-title,
   .gifting-title,
   .exp-title,
   .nl-title {
-    font-size: 2.65rem;
+    font-size: 2.2rem;
+    line-height: 1.12;
+  }
+
+  .hero-desc,
+  .sourcing-desc,
+  .bs-text,
+  .gifting-desc,
+  .nl-desc {
+    font-size: 0.98rem;
+  }
+
+  .hero-image-front {
+    width: 100%;
+    max-height: 50vh;
+  }
+
+  .gifting-visual {
+    min-height: 280px;
+  }
+
+  .gifting-tag {
+    top: 1rem;
+    right: 1rem;
+    font-size: 0.68rem;
+    padding: 0.45rem 0.72rem;
   }
 
   .cart-header,
@@ -2430,6 +2658,52 @@ html.lenis, html.lenis body { height: auto; }
   .cart-coupon-row .btn-text {
     justify-content: center;
     min-height: 2.75rem;
+  }
+
+  .cart-item {
+    gap: 0.8rem;
+    margin-bottom: 1.2rem;
+    padding-bottom: 1.2rem;
+  }
+
+  .cart-item-img {
+    width: 74px;
+    height: 92px;
+  }
+
+  .cart-item-info h4 {
+    font-size: 1rem;
+  }
+
+  .cart-item-actions {
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 0.6rem;
+  }
+
+  .search-result-card {
+    grid-template-columns: 1fr;
+  }
+
+  .search-result-image {
+    min-height: 170px;
+    aspect-ratio: 16 / 10;
+  }
+
+  .search-result-footer {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .search-result-footer .btn-solid-small {
+    width: 100%;
+    justify-content: center;
+  }
+
+  .order-summary-line {
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 0.2rem;
   }
 
 
