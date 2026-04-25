@@ -1,12 +1,78 @@
-import { useCart } from '../context/CartContext';
+import { useEffect, useState } from 'react';
+import { useCart } from '../context/cart-store';
+import { formatCurrency, handleProductImageError } from '../lib/catalog';
+import { calculateCouponDiscount, validateCoupon } from '../../shared/coupons';
 import { X, Plus, Minus, Trash2 } from 'lucide-react';
 
 export default function CartDrawer() {
   const { isCartOpen, closeCart, cartItems, removeFromCart, updateQuantity, total, checkoutCart, isCheckingOut, checkoutError, lastOrder } = useCart();
+  const [customer, setCustomer] = useState({ name: '', email: '' });
+  const [formError, setFormError] = useState('');
+  const [couponCode, setCouponCode] = useState('');
+  const [appliedCoupon, setAppliedCoupon] = useState(null);
+  const [couponMessage, setCouponMessage] = useState('');
 
-  const handleCheckout = async () => {
+  useEffect(() => {
+    const handleKeyDown = (event) => {
+      if (event.key === 'Escape') {
+        closeCart();
+      }
+    };
+
+    if (isCartOpen) {
+      window.addEventListener('keydown', handleKeyDown);
+    }
+
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [closeCart, isCartOpen]);
+
+  const totalItems = cartItems.reduce((sum, item) => sum + item.quantity, 0);
+  const cartCurrency = cartItems[0]?.currency || lastOrder?.currency || 'INR';
+  const freeShippingTarget = 2500;
+  const appliedCouponValidation = appliedCoupon ? validateCoupon(appliedCoupon.code, total) : null;
+  const activeCoupon = appliedCouponValidation?.valid ? appliedCouponValidation.coupon : null;
+  const discount = activeCoupon ? calculateCouponDiscount(activeCoupon, total) : 0;
+  const discountedSubtotal = Math.max(0, total - discount);
+  const freeShippingRemaining = Math.max(0, freeShippingTarget - discountedSubtotal);
+  const freeShippingProgress = Math.min(100, (discountedSubtotal / freeShippingTarget) * 100);
+  const getItemKey = (item) => item.cartKey ?? `${item.id}:${item.weight || 'default'}`;
+
+  const handleApplyCoupon = () => {
+    const validation = validateCoupon(couponCode, total);
+
+    if (!validation.valid) {
+      setAppliedCoupon(null);
+      setCouponMessage(validation.message);
+      return;
+    }
+
+    setAppliedCoupon(validation.coupon);
+    setCouponCode(validation.coupon.code);
+    setCouponMessage(validation.message);
+  };
+
+  const handleRemoveCoupon = () => {
+    setAppliedCoupon(null);
+    setCouponCode('');
+    setCouponMessage('');
+  };
+
+  const handleCheckout = async (event) => {
+    event.preventDefault();
+    const email = customer.email.trim();
+
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+      setFormError('Enter a valid email so we can send your order details.');
+      return;
+    }
+
     try {
-      await checkoutCart({ name: 'Guest Collector' });
+      setFormError('');
+      await checkoutCart({
+        name: customer.name.trim() || 'Guest Collector',
+        email,
+        couponCode: activeCoupon?.code,
+      });
     } catch {
       // Error state is shown from the cart context.
     }
@@ -15,10 +81,10 @@ export default function CartDrawer() {
   return (
     <>
       <div className={`cart-overlay ${isCartOpen ? 'open' : ''}`} onClick={closeCart}></div>
-      <div className={`cart-drawer ${isCartOpen ? 'open' : ''}`}>
+      <aside className={`cart-drawer ${isCartOpen ? 'open' : ''}`} role="dialog" aria-modal="true" aria-label="Shopping cart">
         <div className="cart-header">
-          <h3>{lastOrder ? 'Order Confirmed' : `Your Ritual (${cartItems.length})`}</h3>
-          <button onClick={closeCart} className="close-btn"><X size={24} /></button>
+          <h3>{lastOrder ? 'Order Confirmed' : `Your Ritual (${totalItems})`}</h3>
+          <button type="button" onClick={closeCart} className="close-btn" aria-label="Close cart"><X size={24} /></button>
         </div>
         
         <div className="cart-body">
@@ -29,7 +95,7 @@ export default function CartDrawer() {
               <p>Your archive order has been confirmed and is being prepared for dispatch.</p>
               <div className="order-summary-line">
                 <span>Total</span>
-                <strong>${lastOrder.total.toFixed(2)}</strong>
+                <strong>{formatCurrency(lastOrder.total, lastOrder.currency || 'INR')}</strong>
               </div>
             </div>
           ) : cartItems.length === 0 ? (
@@ -37,18 +103,19 @@ export default function CartDrawer() {
           ) : (
             cartItems.map(item => (
               <div key={item.id} className="cart-item">
-                <img src={item.img} alt={item.title} className="cart-item-img" />
+                <img src={item.img} alt={item.title} className="cart-item-img" onError={(event) => handleProductImageError(event, item)} />
                 <div className="cart-item-info">
                   <h4>{item.title}</h4>
-                  <span className="cart-item-price">${item.price.toFixed(2)}</span>
+                  <span className="cart-item-price">{formatCurrency(item.price, item.currency)}</span>
+                  <span className="cart-item-weight">{item.weight}</span>
                   
                   <div className="cart-item-actions">
                     <div className="qty-selector">
-                      <button onClick={() => updateQuantity(item.id, -1)}><Minus size={14} /></button>
+                      <button type="button" onClick={() => updateQuantity(getItemKey(item), -1)} aria-label={`Decrease ${item.title} ${item.weight} quantity`}><Minus size={14} /></button>
                       <span>{item.quantity}</span>
-                      <button onClick={() => updateQuantity(item.id, 1)}><Plus size={14} /></button>
+                      <button type="button" onClick={() => updateQuantity(getItemKey(item), 1)} aria-label={`Increase ${item.title} ${item.weight} quantity`}><Plus size={14} /></button>
                     </div>
-                    <button onClick={() => removeFromCart(item.id)} className="remove-btn"><Trash2 size={16}/></button>
+                    <button type="button" onClick={() => removeFromCart(getItemKey(item))} className="remove-btn" aria-label={`Remove ${item.title} ${item.weight}`}><Trash2 size={16}/></button>
                   </div>
                 </div>
               </div>
@@ -56,21 +123,78 @@ export default function CartDrawer() {
           )}
         </div>
         
-        {checkoutError && <p className="cart-error">{checkoutError}</p>}
+        {(checkoutError || formError) && <p className="cart-error">{checkoutError || formError}</p>}
 
         {cartItems.length > 0 && !lastOrder && (
-          <div className="cart-footer">
+          <form className="cart-footer" onSubmit={handleCheckout}>
+            <div className="cart-progress" aria-label="Free shipping progress">
+              <div className="cart-progress-copy">
+                <span>{freeShippingRemaining === 0 ? 'Complimentary shipping unlocked' : `${formatCurrency(freeShippingRemaining, cartCurrency)} away from complimentary shipping`}</span>
+              </div>
+              <div className="cart-progress-track">
+                <span style={{ width: `${freeShippingProgress}%` }}></span>
+              </div>
+            </div>
+            <div className="cart-checkout-form">
+              <label className="cart-field">
+                <span>Name</span>
+                <input
+                  type="text"
+                  value={customer.name}
+                  onChange={(event) => setCustomer((current) => ({ ...current, name: event.target.value }))}
+                  placeholder="Guest Collector"
+                />
+              </label>
+              <label className="cart-field">
+                <span>Email</span>
+                <input
+                  type="email"
+                  value={customer.email}
+                  onChange={(event) => setCustomer((current) => ({ ...current, email: event.target.value }))}
+                  placeholder="you@example.com"
+                  required
+                />
+              </label>
+            </div>
+            <div className="cart-coupon">
+              <label className="cart-field">
+                <span>Coupon</span>
+                <div className="cart-coupon-row">
+                  <input
+                    type="text"
+                    value={couponCode}
+                    onChange={(event) => setCouponCode(event.target.value)}
+                    placeholder="CRAFT10"
+                    disabled={Boolean(appliedCoupon)}
+                  />
+                  {appliedCoupon ? (
+                    <button type="button" className="btn-text" onClick={handleRemoveCoupon}>Remove</button>
+                  ) : (
+                    <button type="button" className="btn-text" onClick={handleApplyCoupon}>Apply</button>
+                  )}
+                </div>
+              </label>
+              <p className={`cart-coupon-note ${activeCoupon ? 'success' : ''}`}>
+                {appliedCouponValidation && !appliedCouponValidation.valid ? appliedCouponValidation.message : couponMessage || 'Try CRAFT10, FIRST15, or ESTATE20.'}
+              </p>
+            </div>
             <div className="cart-total">
               <span>Subtotal</span>
-              <span>${total.toFixed(2)}</span>
+              <span>{formatCurrency(total, cartCurrency)}</span>
             </div>
+            {discount > 0 && (
+              <div className="cart-total cart-discount">
+                <span>{activeCoupon.code}</span>
+                <span>-{formatCurrency(discount, cartCurrency)}</span>
+              </div>
+            )}
             <p className="cart-taxes">Shipping & taxes calculated at checkout.</p>
-            <button className="btn-primary full-width" onClick={handleCheckout} disabled={isCheckingOut}>
+            <button type="submit" className="btn-primary full-width" disabled={isCheckingOut}>
               {isCheckingOut ? 'Confirming Order...' : 'Proceed to Checkout'}
             </button>
-          </div>
+          </form>
         )}
-      </div>
+      </aside>
     </>
   );
 }

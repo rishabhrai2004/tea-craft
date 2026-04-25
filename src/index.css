@@ -77,7 +77,27 @@ h1, h2, h3, h4 {
   font-family: var(--font-serif);
   font-weight: 600;
   line-height: 1.1;
-  letter-spacing: -0.03em;
+  letter-spacing: 0;
+}
+
+a {
+  color: inherit;
+}
+
+body.nav-open {
+  overflow: hidden;
+}
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
 }
 
 /* Lenis Config */
@@ -103,6 +123,7 @@ html.lenis, html.lenis body { height: auto; }
   cursor: pointer;
   border-radius: 2px;
   transition: all 0.3s ease;
+  text-decoration: none;
 }
 
 .btn-primary:hover {
@@ -126,6 +147,7 @@ html.lenis, html.lenis body { height: auto; }
   cursor: pointer;
   border-radius: 2px;
   transition: all 0.3s ease;
+  text-decoration: none;
 }
 
 .btn-secondary:hover {
@@ -133,6 +155,7 @@ html.lenis, html.lenis body { height: auto; }
 }
 
 .btn-text {
+  display: inline-flex;
   background: none;
   border: none;
   border-bottom: 1px solid var(--text-main);
@@ -144,6 +167,7 @@ html.lenis, html.lenis body { height: auto; }
   letter-spacing: 0.1em;
   cursor: pointer;
   transition: opacity 0.3s ease;
+  text-decoration: none;
 }
 
 .btn-text:hover { opacity: 0.7; }
@@ -157,6 +181,19 @@ html.lenis, html.lenis body { height: auto; }
   align-items: center;
   justify-content: center;
   position: relative;
+}
+
+.btn-primary:focus-visible,
+.btn-secondary:focus-visible,
+.btn-text:focus-visible,
+.btn-solid-small:focus-visible,
+.icon-btn:focus-visible,
+.close-btn:focus-visible,
+.remove-btn:focus-visible,
+.qty-selector button:focus-visible,
+.nl-submit:focus-visible {
+  outline: 2px solid var(--accent-gold);
+  outline-offset: 4px;
 }
 
 /* Header */
@@ -229,11 +266,24 @@ html.lenis, html.lenis body { height: auto; }
   font-weight: 500;
 }
 
+.account-toggle {
+  gap: 0.45rem;
+}
+
+.account-label {
+  font-size: 0.78rem;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  font-weight: 700;
+}
+
 .logo-main {
   font-family: var(--font-serif);
   font-size: 1.8rem;
   font-weight: 500;
   letter-spacing: 0.05em;
+  color: inherit;
+  text-decoration: none;
 }
 
 .cart-toggle { position: relative; }
@@ -302,6 +352,26 @@ html.lenis, html.lenis body { height: auto; }
 
 .cart-header h3 { font-size: 1.2rem; }
 
+.close-btn {
+  width: 2.5rem;
+  height: 2.5rem;
+  border: 1px solid rgba(20, 26, 22, 0.08);
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.58);
+  color: var(--text-main);
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform 0.25s ease, background 0.25s ease, border-color 0.25s ease;
+}
+
+.close-btn:hover {
+  transform: translateY(-1px);
+  background: var(--surface-strong);
+  border-color: rgba(20, 26, 22, 0.16);
+}
+
 .cart-body {
   flex: 1;
   overflow-y: auto;
@@ -336,7 +406,15 @@ html.lenis, html.lenis body { height: auto; }
 }
 
 .cart-item-info h4 { font-size: 1.1rem; margin-bottom: 0.5rem; }
-.cart-item-price { color: var(--text-light); font-weight: 500; margin-bottom: auto; }
+.cart-item-price { color: var(--text-light); font-weight: 500; margin-bottom: 0; }
+
+.cart-item-weight {
+  color: var(--accent-gold);
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  margin-top: 0.25rem;
+}
 
 .cart-item-actions {
   display: flex;
@@ -370,12 +448,112 @@ html.lenis, html.lenis body { height: auto; }
   border-top: 1px solid rgba(0,0,0,0.05);
 }
 
+.cart-progress {
+  display: grid;
+  gap: 0.75rem;
+  margin-bottom: 1.4rem;
+}
+
+.cart-progress-copy {
+  display: flex;
+  justify-content: space-between;
+  color: var(--text-light);
+  font-size: 0.82rem;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+}
+
+.cart-progress-track {
+  height: 0.45rem;
+  overflow: hidden;
+  border-radius: 999px;
+  background: rgba(20, 26, 22, 0.08);
+}
+
+.cart-progress-track span {
+  display: block;
+  height: 100%;
+  border-radius: inherit;
+  background: linear-gradient(90deg, var(--accent-gold), var(--accent-green));
+}
+
+.cart-checkout-form {
+  display: grid;
+  gap: 0.85rem;
+  margin-bottom: 1.4rem;
+}
+
+.cart-field {
+  display: grid;
+  gap: 0.4rem;
+  color: var(--text-light);
+  font-size: 0.78rem;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+}
+
+.cart-field input {
+  width: 100%;
+  border: 1px solid rgba(20, 26, 22, 0.1);
+  border-radius: 0.9rem;
+  background: rgba(255, 255, 255, 0.72);
+  color: var(--text-main);
+  font: inherit;
+  font-size: 0.95rem;
+  letter-spacing: 0;
+  text-transform: none;
+  padding: 0.9rem 1rem;
+}
+
+.cart-field input:focus {
+  outline: none;
+  border-color: rgba(185, 141, 74, 0.5);
+  box-shadow: 0 0 0 4px rgba(185, 141, 74, 0.12);
+}
+
+.cart-coupon {
+  display: grid;
+  gap: 0.55rem;
+  margin-bottom: 1.35rem;
+}
+
+.cart-coupon-row {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 0.75rem;
+  align-items: center;
+}
+
+.cart-coupon-row .btn-text {
+  align-self: stretch;
+  align-items: center;
+  border: 1px solid rgba(20, 26, 22, 0.12);
+  border-radius: 999px;
+  padding: 0 1rem;
+  background: rgba(255, 255, 255, 0.58);
+}
+
+.cart-coupon-note {
+  color: var(--text-light);
+  font-size: 0.78rem;
+}
+
+.cart-coupon-note.success,
+.cart-discount {
+  color: var(--accent-green);
+}
+
 .cart-total {
   display: flex;
   justify-content: space-between;
   font-family: var(--font-serif);
   font-size: 1.5rem;
   margin-bottom: 0.5rem;
+}
+
+.cart-discount {
+  font-size: 1.05rem;
+  margin-top: -0.1rem;
 }
 
 .cart-taxes {
@@ -443,7 +621,7 @@ html.lenis, html.lenis body { height: auto; }
 }
 
 .hero-heading {
-  font-size: clamp(4rem, 6vw, 6.5rem);
+  font-size: 6.2rem;
   line-height: 1.05;
   margin-bottom: 2rem;
   text-shadow: 0 10px 30px rgba(0,0,0,0.5);
@@ -679,9 +857,9 @@ html.lenis, html.lenis body { height: auto; }
   display: flex;
   justify-content: space-between;
   align-items: flex-end;
-  margin-bottom: 4rem;
   max-width: 1400px;
-  margin: 0 auto;
+  margin: 0 auto 4rem;
+  gap: 2rem;
 }
 
 .section-desc {
@@ -785,7 +963,56 @@ html.lenis, html.lenis body { height: auto; }
 .pcr-type {
   font-size: 0.85rem;
   color: var(--text-light);
-  margin-bottom: 1.5rem;
+  margin-bottom: 1rem;
+}
+
+.pcr-notes {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.45rem;
+  margin-bottom: 1.25rem;
+}
+
+.pcr-notes span {
+  padding: 0.25rem 0.58rem;
+  border: 1px solid rgba(20, 26, 22, 0.08);
+  border-radius: 999px;
+  background: rgba(246, 241, 232, 0.7);
+  color: var(--text-light);
+  font-size: 0.68rem;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+}
+
+.pcr-weight-select {
+  display: grid;
+  gap: 0.45rem;
+  margin-bottom: 1.2rem;
+}
+
+.pcr-weight-select span {
+  color: var(--text-light);
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  letter-spacing: 0.14em;
+}
+
+.pcr-weight-select select {
+  width: 100%;
+  border: 1px solid rgba(20, 26, 22, 0.1);
+  border-radius: 999px;
+  background: rgba(246, 241, 232, 0.75);
+  color: var(--text-main);
+  font: inherit;
+  font-weight: 700;
+  padding: 0.75rem 0.95rem;
+  cursor: pointer;
+}
+
+.pcr-weight-select select:focus {
+  outline: none;
+  border-color: rgba(185, 141, 74, 0.55);
+  box-shadow: 0 0 0 4px rgba(185, 141, 74, 0.12);
 }
 
 .pcr-action-row {
@@ -817,6 +1044,7 @@ html.lenis, html.lenis body { height: auto; }
   cursor: pointer;
   border-radius: 2px;
   transition: background 0.3s ease;
+  text-decoration: none;
 }
 
 .btn-solid-small:hover { background: var(--accent-green); }
@@ -967,13 +1195,13 @@ html.lenis, html.lenis body { height: auto; }
   transform: translate(-50%, -55%);
   z-index: -1;
   pointer-events: none;
-  letter-spacing: -0.05em;
+  letter-spacing: 0;
 }
 
 .jm-content h3 {
   font-size: 2.25rem;
   text-transform: none; /* Sentence case as per example */
-  letter-spacing: -0.02em;
+  letter-spacing: 0;
   color: #fff;
   margin-bottom: 1.5rem;
   font-weight: 500;
@@ -1149,7 +1377,7 @@ html.lenis, html.lenis body { height: auto; }
 }
 
 .exp-title {
-  font-size: clamp(3rem, 5vw, 4.5rem);
+  font-size: 4.5rem;
   margin-bottom: 5rem;
 }
 
@@ -1258,9 +1486,9 @@ html.lenis, html.lenis body { height: auto; }
   display: flex;
   justify-content: space-between;
   align-items: flex-end;
-  margin-bottom: 4rem;
   max-width: 1400px;
-  margin: 0 auto;
+  margin: 0 auto 4rem;
+  gap: 2rem;
 }
 
 .sp-rating {
@@ -1663,7 +1891,7 @@ html.lenis, html.lenis body { height: auto; }
 }
 
 .hero-heading {
-  font-size: clamp(4.6rem, 7vw, 7.6rem);
+  font-size: 6.8rem;
   text-shadow: 0 20px 50px rgba(0, 0, 0, 0.48);
 }
 
@@ -1716,8 +1944,8 @@ html.lenis, html.lenis body { height: auto; }
 }
 
 .section-title {
-  font-size: clamp(3rem, 4.5vw, 4.5rem);
-  letter-spacing: -0.04em;
+  font-size: 4.35rem;
+  letter-spacing: 0;
 }
 
 .bs-grid {
@@ -1816,7 +2044,7 @@ html.lenis, html.lenis body { height: auto; }
 }
 
 .exp-title {
-  font-size: clamp(3rem, 5vw, 4.75rem);
+  font-size: 4.65rem;
 }
 
 .exp-step,
@@ -1847,7 +2075,7 @@ html.lenis, html.lenis body { height: auto; }
 }
 
 .nl-title {
-  font-size: clamp(3rem, 5vw, 4.4rem);
+  font-size: 4.35rem;
 }
 
 .nl-form {
@@ -2030,6 +2258,55 @@ html.lenis, html.lenis body { height: auto; }
   gap: 1rem;
 }
 
+.login-drawer {
+  max-width: 500px;
+}
+
+.login-body {
+  padding: 2rem;
+  overflow-y: auto;
+}
+
+.login-form,
+.account-panel {
+  display: grid;
+  gap: 1.1rem;
+}
+
+.login-form h4,
+.account-panel h4 {
+  font-size: 2rem;
+}
+
+.account-avatar {
+  width: 4.1rem;
+  height: 4.1rem;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  color: #fff;
+  background: linear-gradient(135deg, var(--accent-green), var(--accent-gold));
+  box-shadow: var(--shadow-soft);
+}
+
+.account-benefits {
+  display: grid;
+  gap: 0.75rem;
+  margin: 0.4rem 0 0.7rem;
+}
+
+.account-benefits span {
+  display: flex;
+  align-items: center;
+  gap: 0.55rem;
+  color: var(--text-light);
+  font-size: 0.92rem;
+}
+
+.login-error {
+  margin: 0;
+}
+
 .cart-error,
 .nl-status {
   margin: 0 2rem 1.25rem;
@@ -2037,6 +2314,11 @@ html.lenis, html.lenis body { height: auto; }
   border-radius: 0.9rem;
   font-size: 0.9rem;
   border: 1px solid transparent;
+}
+
+.nl-status {
+  max-width: 540px;
+  margin: 1.25rem auto 0;
 }
 
 .cart-error,
@@ -2154,7 +2436,7 @@ html.lenis, html.lenis body { height: auto; }
   }
 
   .hero-heading {
-    font-size: clamp(3.2rem, 12vw, 4.5rem);
+    font-size: 4rem;
     text-align: center;
   }
 
@@ -2212,6 +2494,10 @@ html.lenis, html.lenis body { height: auto; }
     flex-direction: column;
   }
 
+  .account-label {
+    display: none;
+  }
+
   .bs-image-wrapper {
     width: 100%;
   }
@@ -2224,7 +2510,7 @@ html.lenis, html.lenis body { height: auto; }
   .gifting-title,
   .exp-title,
   .nl-title {
-    font-size: clamp(2.4rem, 10vw, 3.2rem);
+    font-size: 3rem;
     text-align: center;
   }
 
@@ -2311,8 +2597,21 @@ html.lenis, html.lenis body { height: auto; }
   transition: color 0.3s ease;
 }
 
-.mobile-menu-nav a:hover {
+.mobile-menu-nav a:hover,
+.mobile-account-link:hover {
   color: var(--accent-gold);
+}
+
+.mobile-account-link {
+  border: none;
+  background: transparent;
+  color: var(--text-main);
+  cursor: pointer;
+  font-family: var(--font-serif);
+  font-size: 2rem;
+  font-weight: 500;
+  padding: 0;
+  text-align: left;
 }
 
 .mobile-menu-footer {
@@ -2368,5 +2667,34 @@ html.lenis, html.lenis body { height: auto; }
 
   .cart-drawer {
     max-width: 100%;
+  }
+
+  .hero-heading {
+    font-size: 3.05rem;
+  }
+
+  .section-title,
+  .gifting-title,
+  .exp-title,
+  .nl-title {
+    font-size: 2.65rem;
+  }
+
+  .cart-header,
+  .cart-body,
+  .cart-footer,
+  .search-body,
+  .login-body {
+    padding-left: 1.25rem;
+    padding-right: 1.25rem;
+  }
+
+  .cart-coupon-row {
+    grid-template-columns: 1fr;
+  }
+
+  .cart-coupon-row .btn-text {
+    justify-content: center;
+    min-height: 2.75rem;
   }
 }

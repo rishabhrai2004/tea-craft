@@ -2,7 +2,7 @@ export default function Experience() {
   const experienceBgSrc = '/photos/experience-bg.webp';
 
   return (
-    <section className="experience-section">
+    <section className="experience-section" id="experience">
       <div className="exp-bg-wrapper">
         <img
           src={experienceBgSrc}

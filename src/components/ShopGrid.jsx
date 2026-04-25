@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { useCart } from '../context/CartContext';
+import { useCart } from '../context/cart-store';
 import { formatCurrency } from '../lib/catalog';
 
 export default function ShopGrid() {
@@ -19,10 +19,10 @@ export default function ShopGrid() {
       .catch(() => {
         if (active) {
           setProducts([
-            { id: 4, title: 'Assam Breakfast', origin: 'Assam', price: 28, currency: 'USD', img: '/assam_tea.png' },
-            { id: 6, title: 'Saffron Oolong', origin: 'Rajasthan', price: 42, currency: 'USD', img: '/rajasthan_tea.png' },
-            { id: 7, title: 'Himalayan White', origin: 'Darjeeling', price: 55, currency: 'USD', img: '/darjeeling_tea.png' },
-            { id: 3, title: 'Cardamom Green', origin: 'Kerala', price: 32, currency: 'USD', img: '/kerala_tea.png' },
+            { id: 1, title: 'Black Tea', origin: 'China and India', price: 349, currency: 'INR', weight: '100g', img: '/assam_tea.png' },
+            { id: 2, title: 'Green Tea', origin: 'China and Japan', price: 329, currency: 'INR', weight: '100g', img: '/kerala_tea.png' },
+            { id: 8, title: 'Matcha', origin: 'Japan', price: 899, currency: 'INR', weight: '100g', img: '/kerala_tea.png' },
+            { id: 15, title: 'Chai Tea', origin: 'India', price: 349, currency: 'INR', weight: '100g', img: '/assam_tea.png' },
           ]);
         }
       });
@@ -36,7 +36,7 @@ export default function ShopGrid() {
     <section className="shop-section" id="shop">
       <div className="shop-header">
         <h2 className="text-large">Curated Selection</h2>
-        <a href="#" className="uppercase" style={{textDecoration: 'underline'}}>View All Collections</a>
+        <a href="#shop" className="uppercase" style={{textDecoration: 'underline'}}>View All Collections</a>
       </div>
       <div className="shop-grid">
         {products.map(product => (

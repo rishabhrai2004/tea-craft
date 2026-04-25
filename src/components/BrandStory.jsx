@@ -1,6 +1,5 @@
 import { useEffect, useRef } from 'react';
 import { gsap } from 'gsap';
-import { ScrollTrigger } from 'gsap/ScrollTrigger';
 
 export default function BrandStory() {
   const storyRef = useRef(null);
@@ -71,7 +70,7 @@ export default function BrandStory() {
               <p>Seasonal small-batch releases</p>
             </div>
           </div>
-          <button className="btn-text mt-4">Discover Our Estates</button>
+          <a className="btn-text mt-4" href="#locations">Discover Our Estates</a>
         </div>
       </div>
     </section>

@@ -1,6 +1,5 @@
 import { useEffect, useRef } from 'react';
 import { gsap } from 'gsap';
-import { ScrollTrigger } from 'gsap/ScrollTrigger';
 
 export default function JourneyMaster() {
   const containerRef = useRef(null);
@@ -131,7 +130,7 @@ export default function JourneyMaster() {
       </div>
 
       <div className="jm-left">
-        {stages.map((stage, i) => (
+        {stages.map((stage) => (
           <div 
             className="jm-row" 
             key={stage.id}

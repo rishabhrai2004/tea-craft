@@ -36,7 +36,7 @@ export default function Regions() {
     const ctx = gsap.context(() => {
       const slides = gsap.utils.toArray('.region-slide');
       
-      slides.forEach((slide, i) => {
+      slides.forEach((slide) => {
         ScrollTrigger.create({
           trigger: slide,
           start: 'top top',

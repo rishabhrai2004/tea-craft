@@ -6,6 +6,7 @@ import { CartProvider } from './context/CartContext';
 import Header from './components/Header';
 import CartDrawer from './components/CartDrawer';
 import SearchDrawer from './components/SearchDrawer';
+import LoginDrawer from './components/LoginDrawer';
 import Hero from './components/Hero';
 import BrandStory from './components/BrandStory';
 import Sourcing from './components/Sourcing';
@@ -19,8 +20,25 @@ import './index.css';
 
 gsap.registerPlugin(ScrollTrigger);
 
+const ACCOUNT_STORAGE_KEY = 'teaCraft.account.v1';
+
+function readStoredAccount() {
+  if (typeof window === 'undefined') {
+    return null;
+  }
+
+  try {
+    const raw = window.localStorage.getItem(ACCOUNT_STORAGE_KEY);
+    return raw ? JSON.parse(raw) : null;
+  } catch {
+    return null;
+  }
+}
+
 function App() {
   const [isSearchOpen, setIsSearchOpen] = useState(false);
+  const [isLoginOpen, setIsLoginOpen] = useState(false);
+  const [account, setAccount] = useState(() => readStoredAccount());
 
   useEffect(() => {
     const lenis = new Lenis({
@@ -47,11 +65,32 @@ function App() {
     };
   }, []);
 
+  const handleLogin = (nextAccount) => {
+    setAccount(nextAccount);
+    window.localStorage.setItem(ACCOUNT_STORAGE_KEY, JSON.stringify(nextAccount));
+  };
+
+  const handleLogout = () => {
+    setAccount(null);
+    window.localStorage.removeItem(ACCOUNT_STORAGE_KEY);
+  };
+
   return (
     <CartProvider>
       <div className="app-main">
-        <Header onSearchClick={() => setIsSearchOpen(true)} />
+        <Header
+          onSearchClick={() => setIsSearchOpen(true)}
+          onLoginClick={() => setIsLoginOpen(true)}
+          account={account}
+        />
         <SearchDrawer isOpen={isSearchOpen} onClose={() => setIsSearchOpen(false)} />
+        <LoginDrawer
+          isOpen={isLoginOpen}
+          onClose={() => setIsLoginOpen(false)}
+          account={account}
+          onLogin={handleLogin}
+          onLogout={handleLogout}
+        />
         <CartDrawer />
         
         <main>

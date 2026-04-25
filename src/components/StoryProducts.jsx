@@ -1,30 +1,36 @@
 import { useEffect, useState } from 'react';
-import { useCart } from '../context/CartContext';
+import { useCart } from '../context/cart-store';
 import { formatCurrency } from '../lib/catalog';
 
 const stories = [
   {
-    id: 'rajasthan',
+    id: 15,
     region: 'Rajasthan',
-    title: 'Saffron Reserve',
-    desc: 'Crafted in the spirit of Rajput royalty. A bold black tea married with hand-plucked saffron and desert rose. Uncompromising richness.',
-    price: '$45.00',
+    title: 'Chai Tea',
+    desc: 'A spiced black tea with ginger, cinnamon, cardamom, and clove warmth.',
+    price: 349,
+    currency: 'INR',
+    weight: '100g',
     img: '/rajasthan_tea.png'
   },
   {
-    id: 'darjeeling',
+    id: 4,
     region: 'Darjeeling',
-    title: 'First Flush Pearl',
-    desc: 'Harvested in the misty high altitudes of the Himalayas. Hand-rolled, minimally oxidized, pure mountain elegance.',
-    price: '$65.00',
+    title: 'White Tea',
+    desc: 'A delicate tea made from pale buds with a soft floral cup.',
+    price: 449,
+    currency: 'INR',
+    weight: '100g',
     img: '/darjeeling_tea.png'
   },
   {
-    id: 'kerala',
+    id: 2,
     region: 'Kerala',
-    title: 'Spiced Emerald',
-    desc: 'Deep within the tropical jungles. Rich green tea subtly infused with wild cardamom and lemongrass. A vibrant sensory explosion.',
-    price: '$38.00',
+    title: 'Green Tea',
+    desc: 'A clean green tea with a mild body and bright grassy aroma.',
+    price: 329,
+    currency: 'INR',
+    weight: '100g',
     img: '/kerala_tea.png'
   }
 ];

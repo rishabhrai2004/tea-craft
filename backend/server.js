@@ -3,6 +3,7 @@ import http from 'http';
 import { readFile, writeFile, mkdir, access } from 'fs/promises';
 import path from 'path';
 import { fileURLToPath } from 'url';
+import { validateCoupon } from '../shared/coupons.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -84,6 +85,20 @@ async function readRequestBody(req) {
 
 async function getProducts() {
   return readJson(productsFile, []);
+}
+
+function getProductWeightOption(product, requestedWeight) {
+  const options = Array.isArray(product.weightOptions) ? product.weightOptions : [];
+
+  if (options.length === 0) {
+    return {
+      label: product.weight || '',
+      grams: Number.parseInt(product.weight || '0', 10) || 0,
+      price: Number(product.price) || 0,
+    };
+  }
+
+  return options.find((option) => option.label === requestedWeight) || options[0];
 }
 
 async function handleApi(req, res, parsedUrl) {
@@ -207,12 +222,18 @@ async function handleApi(req, res, parsedUrl) {
       }
 
       const quantity = Math.max(1, Number(item.quantity || 1));
+      const selectedWeight = getProductWeightOption(product, String(item.weight || ''));
+      const price = Number(selectedWeight.price);
+
       return {
         id: product.id,
         title: product.title,
-        price: Number(product.price),
+        price,
+        currency: product.currency || 'INR',
+        weight: selectedWeight.label,
+        weightGrams: selectedWeight.grams,
         quantity,
-        subtotal: Number(product.price) * quantity,
+        subtotal: price * quantity,
         img: product.img,
       };
     }).filter(Boolean);
@@ -222,9 +243,18 @@ async function handleApi(req, res, parsedUrl) {
     }
 
     const subtotal = orderItems.reduce((sum, item) => sum + item.subtotal, 0);
-    const shipping = subtotal >= 100 ? 0 : 8;
-    const tax = Number((subtotal * 0.08).toFixed(2));
-    const total = Number((subtotal + shipping + tax).toFixed(2));
+    const couponCode = String(body.couponCode || '').trim();
+    const couponValidation = couponCode ? validateCoupon(couponCode, subtotal) : null;
+
+    if (couponCode && !couponValidation.valid) {
+      return sendJson(res, 400, { message: couponValidation.message });
+    }
+
+    const discount = couponValidation?.discount || 0;
+    const discountedSubtotal = Math.max(0, subtotal - discount);
+    const shipping = discountedSubtotal >= 2500 ? 0 : 99;
+    const tax = Math.round(discountedSubtotal * 0.05);
+    const total = Math.round(discountedSubtotal + shipping + tax);
     const order = {
       id: `order_${Date.now()}`,
       orderNumber: `CT-${new Date().getFullYear()}-${String(Math.floor(Math.random() * 9000) + 1000)}`,
@@ -234,7 +264,16 @@ async function handleApi(req, res, parsedUrl) {
         name: String(body.name || 'Guest Collector').trim(),
       },
       items: orderItems,
+      currency: 'INR',
       subtotal: Number(subtotal.toFixed(2)),
+      discount,
+      coupon: couponValidation?.coupon
+        ? {
+            code: couponValidation.coupon.code,
+            label: couponValidation.coupon.label,
+            value: couponValidation.coupon.value,
+          }
+        : null,
       shipping,
       tax,
       total,
@@ -296,6 +335,17 @@ async function serveStatic(req, res, parsedUrl) {
   }
 }
 
+async function serveViteApp(req, res, parsedUrl, vite) {
+  try {
+    const template = await readFile(path.join(projectRoot, 'index.html'), 'utf8');
+    const html = await vite.transformIndexHtml(parsedUrl.pathname, template);
+    sendText(res, 200, html, 'text/html; charset=utf-8');
+  } catch (error) {
+    vite.ssrFixStacktrace(error);
+    throw error;
+  }
+}
+
 async function start() {
   await mkdir(dataDir, { recursive: true });
   await ensureStore(productsFile, []);
@@ -320,9 +370,8 @@ async function start() {
       }
 
       if (!isProduction && vite) {
-        vite.middlewares(req, res, () => {
-          res.statusCode = 404;
-          res.end();
+        vite.middlewares(req, res, async () => {
+          await serveViteApp(req, res, parsedUrl, vite);
         });
         return;
       }

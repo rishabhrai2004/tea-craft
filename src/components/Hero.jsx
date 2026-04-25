@@ -22,7 +22,7 @@ export default function Hero() {
   }, []);
 
   return (
-    <section className="hero-section" ref={heroRef}>
+    <section className="hero-section" id="top" ref={heroRef}>
       <div className="hero-bg-layer">
         <img 
           src={heroTextureSrc}
@@ -38,13 +38,14 @@ export default function Hero() {
       <div className="hero-grid">
         <div className="hero-content">
 
+          <span className="hero-kicker hero-text-anim">Single-origin Indian estate teas</span>
           <h1 className="hero-heading hero-text-anim">Crafting Legacy,<br/>Protecting Earth</h1>
           <p className="hero-desc hero-text-anim">
             Experience the artisanal soul of Indian tea. From our ancestral estates to your cup, we preserve the purity of nature and the wisdom of generations.
           </p>
           <div className="hero-cta-group hero-text-anim">
-            <button className="btn-primary">Shop Collection <ArrowRight size={18} /></button>
-            <button className="btn-secondary">Explore the Story</button>
+            <a className="btn-primary" href="#shop">Shop Collection <ArrowRight size={18} /></a>
+            <a className="btn-secondary" href="#story">Explore the Story</a>
           </div>
 
           <div className="hero-metrics hero-text-anim">

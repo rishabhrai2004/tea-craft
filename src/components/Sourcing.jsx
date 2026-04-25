@@ -4,7 +4,7 @@ export default function Sourcing() {
   const munnarEstateSrc = '/photos/source-munnar.jpg';
 
   return (
-    <section className="sourcing-section">
+    <section className="sourcing-section" id="locations">
       <div className="sourcing-header">
         <h2 className="section-title">The Source of Silence</h2>
         <p className="sourcing-desc">We traverse the rugged terrains of India to partner exclusively with estates that practice biodynamic and sustainable farming. No middlemen. Just the pure leaf.</p>

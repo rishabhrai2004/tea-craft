@@ -1,9 +1,12 @@
-import { createContext, useContext, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { createOrder } from '../lib/api';
 import { toCartItem } from '../lib/catalog';
-
-const CartContext = createContext();
+import { CartContext } from './cart-store';
 const CART_STORAGE_KEY = 'teaCraft.cart.v1';
+
+function getCartItemKey(item) {
+  return item.cartKey ?? `${item.id}:${item.weight || 'default'}`;
+}
 
 function readStoredCart() {
   if (typeof window === 'undefined') {
@@ -12,7 +15,8 @@ function readStoredCart() {
 
   try {
     const raw = window.localStorage.getItem(CART_STORAGE_KEY);
-    return raw ? JSON.parse(raw) : [];
+    const parsed = raw ? JSON.parse(raw) : [];
+    return Array.isArray(parsed) ? parsed.filter((item) => item.currency === 'INR') : [];
   } catch {
     return [];
   }
@@ -43,22 +47,22 @@ export function CartProvider({ children }) {
     setCheckoutError('');
     setCartItems(prev => {
       const normalized = toCartItem(product);
-      const existing = prev.find(item => item.id === normalized.id);
+      const existing = prev.find(item => getCartItemKey(item) === normalized.cartKey);
       if (existing) {
-        return prev.map(item => item.id === normalized.id ? { ...item, quantity: item.quantity + 1 } : item);
+        return prev.map(item => getCartItemKey(item) === normalized.cartKey ? { ...item, ...normalized, quantity: item.quantity + 1 } : item);
       }
       return [...prev, { ...normalized, quantity: 1 }];
     });
     openCart();
   };
 
-  const removeFromCart = (id) => {
-    setCartItems(prev => prev.filter(item => item.id !== id));
+  const removeFromCart = (cartKey) => {
+    setCartItems(prev => prev.filter(item => getCartItemKey(item) !== cartKey));
   };
 
-  const updateQuantity = (id, delta) => {
+  const updateQuantity = (cartKey, delta) => {
     setCartItems(prev => prev.map(item => {
-      if (item.id === id) {
+      if (getCartItemKey(item) === cartKey) {
         const newQuantity = Math.max(1, item.quantity + delta);
         return { ...item, quantity: newQuantity };
       }
@@ -78,7 +82,7 @@ export function CartProvider({ children }) {
 
     try {
       const order = await createOrder(
-        cartItems.map((item) => ({ id: item.id, quantity: item.quantity })),
+        cartItems.map((item) => ({ id: item.id, quantity: item.quantity, weight: item.weight })),
         customer,
       );
       setLastOrder(order.order);
@@ -98,5 +102,3 @@ export function CartProvider({ children }) {
     </CartContext.Provider>
   );
 }
-
-export const useCart = () => useContext(CartContext);

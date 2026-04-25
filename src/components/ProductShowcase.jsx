@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { useCart } from '../context/CartContext';
+import { useCart } from '../context/cart-store';
 import { formatCurrency } from '../lib/catalog';
 
 export default function ProductShowcase() {
@@ -19,9 +19,9 @@ export default function ProductShowcase() {
       .catch(() => {
         if (active) {
           setProducts([
-            { id: 1, title: 'Royal Saffron Blend', price: 45, currency: 'USD', img: '/rajasthan_tea.png' },
-            { id: 4, title: 'Assam Bold Morning', price: 28, currency: 'USD', img: '/assam_tea.png' },
-            { id: 2, title: 'Darjeeling First Flush', price: 55, currency: 'USD', img: '/darjeeling_tea.png' },
+            { id: 1, title: 'Black Tea', price: 349, currency: 'INR', weight: '100g', img: '/assam_tea.png' },
+            { id: 2, title: 'Green Tea', price: 329, currency: 'INR', weight: '100g', img: '/kerala_tea.png' },
+            { id: 4, title: 'White Tea', price: 449, currency: 'INR', weight: '100g', img: '/darjeeling_tea.png' },
           ]);
         }
       });

@@ -1,102 +1,682 @@
 [
   {
     "id": 1,
-    "slug": "royal-saffron-reserve",
-    "title": "Royal Saffron Reserve",
-    "origin": "Rajasthan",
-    "type": "Black Tea",
+    "slug": "black-tea",
+    "title": "Black Tea",
+    "origin": "China and India",
+    "type": "Fully Oxidized Tea",
     "weight": "100g",
-    "price": 45,
-    "currency": "USD",
-    "img": "/rajasthan_tea.png",
+    "price": 349,
+    "currency": "INR",
+    "img": "https://brewbuch.com/wp-content/uploads/2023/05/black-tea.jpg",
+    "imgAlt": "Black tea leaves on a white background",
     "tag": "Best Seller",
     "featured": true,
-    "description": "A bold black tea layered with saffron warmth and desert rose complexity.",
-    "notes": ["Saffron", "Desert rose", "Molasses finish"]
+    "description": "A robust, deeply oxidized tea with classic strength and a rounded finish.",
+    "notes": [
+      "Malty",
+      "Bold",
+      "Dark amber"
+    ],
+    "sourceUrl": "https://brewbuch.com/different-types-of-tea/",
+    "basePrice": 349,
+    "weightOptions": [
+      {
+        "grams": 100,
+        "label": "100g",
+        "price": 349
+      },
+      {
+        "grams": 500,
+        "label": "500g",
+        "price": 1699.0
+      },
+      {
+        "grams": 1000,
+        "label": "1000g",
+        "price": 3099.0
+      },
+      {
+        "grams": 1500,
+        "label": "1500g",
+        "price": 4399.0
+      }
+    ]
   },
   {
     "id": 2,
-    "slug": "first-flush-pearl",
-    "title": "First Flush Pearl",
-    "origin": "Darjeeling",
-    "type": "White Tea",
-    "weight": "50g",
-    "price": 65,
-    "currency": "USD",
-    "img": "/darjeeling_tea.png",
-    "tag": "Limited",
+    "slug": "green-tea",
+    "title": "Green Tea",
+    "origin": "China and Japan",
+    "type": "Minimally Oxidized Tea",
+    "weight": "100g",
+    "price": 329,
+    "currency": "INR",
+    "img": "https://brewbuch.com/wp-content/uploads/2023/05/green-tea.jpg",
+    "imgAlt": "Green tea leaves and dried tea on a white background",
+    "tag": "Fresh",
     "featured": true,
-    "description": "A luminous first flush with alpine florals and a clean, silk-like finish.",
-    "notes": ["Jasmine", "Stone fruit", "Silky finish"]
+    "description": "A clean green tea with a mild body and bright grassy aroma.",
+    "notes": [
+      "Grassy",
+      "Fresh",
+      "Light body"
+    ],
+    "sourceUrl": "https://brewbuch.com/different-types-of-tea/",
+    "basePrice": 329,
+    "weightOptions": [
+      {
+        "grams": 100,
+        "label": "100g",
+        "price": 329
+      },
+      {
+        "grams": 500,
+        "label": "500g",
+        "price": 1599.0
+      },
+      {
+        "grams": 1000,
+        "label": "1000g",
+        "price": 2899.0
+      },
+      {
+        "grams": 1500,
+        "label": "1500g",
+        "price": 4099.0
+      }
+    ]
   },
   {
     "id": 3,
-    "slug": "munnar-spiced-emerald",
-    "title": "Munnar Spiced Emerald",
-    "origin": "Kerala",
-    "type": "Green Tea",
-    "weight": "150g",
-    "price": 38,
-    "currency": "USD",
-    "img": "/kerala_tea.png",
+    "slug": "herbal-tea",
+    "title": "Herbal Tea",
+    "origin": "Botanical Blend",
+    "type": "Tisane",
+    "weight": "100g",
+    "price": 299,
+    "currency": "INR",
+    "img": "https://brewbuch.com/wp-content/uploads/2023/05/herbal-tea-1024x683.jpg",
+    "imgAlt": "Herbal tea blend with flowers, spices, and tea tools",
+    "tag": "Caffeine Free",
     "featured": true,
-    "description": "Bright green tea infused with gentle spice and mountain freshness.",
-    "notes": ["Cardamom", "Fresh grass", "Citrus peel"]
+    "description": "A soothing botanical infusion made from herbs, flowers, spices, and fruit.",
+    "notes": [
+      "Floral",
+      "Spiced",
+      "Soothing"
+    ],
+    "sourceUrl": "https://brewbuch.com/different-types-of-tea/",
+    "basePrice": 299,
+    "weightOptions": [
+      {
+        "grams": 100,
+        "label": "100g",
+        "price": 299
+      },
+      {
+        "grams": 500,
+        "label": "500g",
+        "price": 1399.0
+      },
+      {
+        "grams": 1000,
+        "label": "1000g",
+        "price": 2599.0
+      },
+      {
+        "grams": 1500,
+        "label": "1500g",
+        "price": 3799.0
+      }
+    ]
   },
   {
     "id": 4,
-    "slug": "assam-bold-morning",
-    "title": "Assam Bold Morning",
-    "origin": "Assam",
-    "type": "Black Tea",
-    "weight": "200g",
-    "price": 28,
-    "currency": "USD",
-    "img": "/assam_tea.png",
-    "featured": false,
-    "description": "A robust morning cup with malt depth and a long, velvety body.",
-    "notes": ["Malt", "Cocoa", "Brisk finish"]
+    "slug": "white-tea",
+    "title": "White Tea",
+    "origin": "Fujian",
+    "type": "Lightly Withered Tea",
+    "weight": "100g",
+    "price": 449,
+    "currency": "INR",
+    "img": "https://brewbuch.com/wp-content/uploads/2023/05/white-tea-1024x683.jpg",
+    "imgAlt": "White tea buds on a white background",
+    "tag": "Delicate",
+    "featured": true,
+    "description": "A delicate tea made from pale buds with a soft floral cup.",
+    "notes": [
+      "Floral",
+      "Silvery buds",
+      "Soft finish"
+    ],
+    "sourceUrl": "https://brewbuch.com/different-types-of-tea/",
+    "basePrice": 449,
+    "weightOptions": [
+      {
+        "grams": 100,
+        "label": "100g",
+        "price": 449
+      },
+      {
+        "grams": 500,
+        "label": "500g",
+        "price": 2099.0
+      },
+      {
+        "grams": 1000,
+        "label": "1000g",
+        "price": 3899.0
+      },
+      {
+        "grams": 1500,
+        "label": "1500g",
+        "price": 5599.0
+      }
+    ]
   },
   {
     "id": 5,
-    "slug": "assam-breakfast",
-    "title": "Assam Breakfast",
-    "origin": "Assam",
-    "type": "Black Tea",
-    "weight": "125g",
-    "price": 29,
-    "currency": "USD",
-    "img": "/assam_tea.png",
-    "featured": false,
-    "description": "An elevated breakfast blend with bold structure and luminous clarity.",
-    "notes": ["Malty", "Bright", "Full-bodied"]
+    "slug": "butterfly-pea-flower-tea",
+    "title": "Butterfly Pea Flower Tea",
+    "origin": "Southeast Asia",
+    "type": "Flower Tea",
+    "weight": "100g",
+    "price": 399,
+    "currency": "INR",
+    "img": "https://brewbuch.com/wp-content/uploads/2023/05/butterfly-pea-tea-1024x683.jpg",
+    "imgAlt": "Butterfly pea flower tea on a white background",
+    "tag": "Color Change",
+    "featured": true,
+    "description": "A vivid blue flower infusion with a gentle earthy profile.",
+    "notes": [
+      "Blue cup",
+      "Earthy",
+      "Iced tea"
+    ],
+    "sourceUrl": "https://brewbuch.com/different-types-of-tea/",
+    "basePrice": 399,
+    "weightOptions": [
+      {
+        "grams": 100,
+        "label": "100g",
+        "price": 399
+      },
+      {
+        "grams": 500,
+        "label": "500g",
+        "price": 1899.0
+      },
+      {
+        "grams": 1000,
+        "label": "1000g",
+        "price": 3499.0
+      },
+      {
+        "grams": 1500,
+        "label": "1500g",
+        "price": 4999.0
+      }
+    ]
   },
   {
     "id": 6,
-    "slug": "saffron-oolong",
-    "title": "Saffron Oolong",
-    "origin": "Rajasthan",
-    "type": "Oolong",
-    "weight": "80g",
-    "price": 42,
-    "currency": "USD",
-    "img": "/rajasthan_tea.png",
-    "featured": false,
-    "description": "A polished oolong with golden aromatics and a soft, mineral-driven finish.",
-    "notes": ["Honey", "Orchid", "Mineral"]
+    "slug": "guayusa-tea",
+    "title": "Guayusa Tea",
+    "origin": "Amazon Rainforest",
+    "type": "Holly Leaf Tea",
+    "weight": "100g",
+    "price": 379,
+    "currency": "INR",
+    "img": "https://brewbuch.com/wp-content/uploads/2023/05/Guayusa-tea-1024x683.jpg",
+    "imgAlt": "Guayusa tea leaves on a white background",
+    "tag": "Energizing",
+    "featured": true,
+    "description": "A smooth Amazonian leaf tea with earthy sweetness and morning energy.",
+    "notes": [
+      "Earthy",
+      "Smooth",
+      "Bright lift"
+    ],
+    "sourceUrl": "https://brewbuch.com/different-types-of-tea/",
+    "basePrice": 379,
+    "weightOptions": [
+      {
+        "grams": 100,
+        "label": "100g",
+        "price": 379
+      },
+      {
+        "grams": 500,
+        "label": "500g",
+        "price": 1799.0
+      },
+      {
+        "grams": 1000,
+        "label": "1000g",
+        "price": 3299.0
+      },
+      {
+        "grams": 1500,
+        "label": "1500g",
+        "price": 4699.0
+      }
+    ]
   },
   {
     "id": 7,
-    "slug": "himalayan-white",
-    "title": "Himalayan White",
-    "origin": "Darjeeling",
-    "type": "White Tea",
-    "weight": "60g",
-    "price": 55,
-    "currency": "USD",
-    "img": "/darjeeling_tea.png",
+    "slug": "lapsang-souchong",
+    "title": "Lapsang Souchong",
+    "origin": "Wuyi Mountains",
+    "type": "Smoked Black Tea",
+    "weight": "100g",
+    "price": 499,
+    "currency": "INR",
+    "img": "https://brewbuch.com/wp-content/uploads/2023/05/Lapsang-Souchong-tea-1024x683.jpg",
+    "imgAlt": "Lapsang Souchong tea leaves on a white background",
+    "tag": "Smoky",
+    "featured": true,
+    "description": "A dramatic black tea dried over pinewood smoke for a deep campfire aroma.",
+    "notes": [
+      "Pine smoke",
+      "Bold",
+      "Savory"
+    ],
+    "sourceUrl": "https://brewbuch.com/different-types-of-tea/",
+    "basePrice": 499,
+    "weightOptions": [
+      {
+        "grams": 100,
+        "label": "100g",
+        "price": 499
+      },
+      {
+        "grams": 500,
+        "label": "500g",
+        "price": 2299.0
+      },
+      {
+        "grams": 1000,
+        "label": "1000g",
+        "price": 4299.0
+      },
+      {
+        "grams": 1500,
+        "label": "1500g",
+        "price": 6199.0
+      }
+    ]
+  },
+  {
+    "id": 8,
+    "slug": "matcha",
+    "title": "Matcha",
+    "origin": "Japan",
+    "type": "Powdered Green Tea",
+    "weight": "100g",
+    "price": 899,
+    "currency": "INR",
+    "img": "https://brewbuch.com/wp-content/uploads/2023/05/matcha-tea-1024x683.jpg",
+    "imgAlt": "Matcha tea powder on a white background",
+    "tag": "Ceremonial",
+    "featured": true,
+    "description": "A finely ground green tea with vivid color, umami, and a creamy froth.",
+    "notes": [
+      "Umami",
+      "Vivid green",
+      "Frothy"
+    ],
+    "sourceUrl": "https://brewbuch.com/different-types-of-tea/",
+    "basePrice": 899,
+    "weightOptions": [
+      {
+        "grams": 100,
+        "label": "100g",
+        "price": 899
+      },
+      {
+        "grams": 500,
+        "label": "500g",
+        "price": 4199.0
+      },
+      {
+        "grams": 1000,
+        "label": "1000g",
+        "price": 7799.0
+      },
+      {
+        "grams": 1500,
+        "label": "1500g",
+        "price": 11199.0
+      }
+    ]
+  },
+  {
+    "id": 9,
+    "slug": "mate-tea",
+    "title": "Mate Tea",
+    "origin": "South America",
+    "type": "Yerba Mate",
+    "weight": "100g",
+    "price": 349,
+    "currency": "INR",
+    "img": "https://brewbuch.com/wp-content/uploads/2023/05/mate-tea-1024x683.jpg",
+    "imgAlt": "Mate tea leaves on a white background",
+    "tag": null,
     "featured": false,
-    "description": "A delicate high-altitude white tea with clean florals and rare clarity.",
-    "notes": ["White blossom", "Pear", "Silken cup"]
+    "description": "A traditional South American tea with bitter, earthy intensity.",
+    "notes": [
+      "Earthy",
+      "Bitter",
+      "Focused"
+    ],
+    "sourceUrl": "https://brewbuch.com/different-types-of-tea/",
+    "basePrice": 349,
+    "weightOptions": [
+      {
+        "grams": 100,
+        "label": "100g",
+        "price": 349
+      },
+      {
+        "grams": 500,
+        "label": "500g",
+        "price": 1699.0
+      },
+      {
+        "grams": 1000,
+        "label": "1000g",
+        "price": 3099.0
+      },
+      {
+        "grams": 1500,
+        "label": "1500g",
+        "price": 4399.0
+      }
+    ]
+  },
+  {
+    "id": 10,
+    "slug": "oolong-tea",
+    "title": "Oolong Tea",
+    "origin": "China and Taiwan",
+    "type": "Partially Oxidized Tea",
+    "weight": "100g",
+    "price": 649,
+    "currency": "INR",
+    "img": "https://brewbuch.com/wp-content/uploads/2023/05/oolong-tea-1024x683.jpg",
+    "imgAlt": "Oolong tea leaves on a white background",
+    "tag": "Complex",
+    "featured": false,
+    "description": "A partially oxidized tea that moves between floral, fruity, and rich.",
+    "notes": [
+      "Floral",
+      "Stone fruit",
+      "Layered"
+    ],
+    "sourceUrl": "https://brewbuch.com/different-types-of-tea/",
+    "basePrice": 649,
+    "weightOptions": [
+      {
+        "grams": 100,
+        "label": "100g",
+        "price": 649
+      },
+      {
+        "grams": 500,
+        "label": "500g",
+        "price": 2999.0
+      },
+      {
+        "grams": 1000,
+        "label": "1000g",
+        "price": 5599.0
+      },
+      {
+        "grams": 1500,
+        "label": "1500g",
+        "price": 8099.0
+      }
+    ]
+  },
+  {
+    "id": 11,
+    "slug": "pu-erh-tea",
+    "title": "Pu-erh Tea",
+    "origin": "Yunnan",
+    "type": "Fermented Tea",
+    "weight": "100g",
+    "price": 899,
+    "currency": "INR",
+    "img": "https://brewbuch.com/wp-content/uploads/2023/05/Pu-erh-Tea-1024x683.jpg",
+    "imgAlt": "Pu-erh tea leaves on a white background",
+    "tag": "Aged",
+    "featured": false,
+    "description": "A fermented tea prized for depth, age, and a mellow earthy body.",
+    "notes": [
+      "Earthy",
+      "Aged",
+      "Smooth"
+    ],
+    "sourceUrl": "https://brewbuch.com/different-types-of-tea/",
+    "basePrice": 899,
+    "weightOptions": [
+      {
+        "grams": 100,
+        "label": "100g",
+        "price": 899
+      },
+      {
+        "grams": 500,
+        "label": "500g",
+        "price": 4199.0
+      },
+      {
+        "grams": 1000,
+        "label": "1000g",
+        "price": 7799.0
+      },
+      {
+        "grams": 1500,
+        "label": "1500g",
+        "price": 11199.0
+      }
+    ]
+  },
+  {
+    "id": 12,
+    "slug": "purple-tea",
+    "title": "Purple Tea",
+    "origin": "Kenya",
+    "type": "Anthocyanin-Rich Tea",
+    "weight": "100g",
+    "price": 599,
+    "currency": "INR",
+    "img": "https://brewbuch.com/wp-content/uploads/2023/05/types-of-tea.jpg",
+    "imgAlt": "A variety of tea leaves photographed for the BrewBuch tea guide",
+    "tag": "Rare",
+    "featured": false,
+    "description": "A rare purple-tinted tea leaf with a light floral body and gentle sweetness.",
+    "notes": [
+      "Floral",
+      "Soft sweetness",
+      "Low caffeine"
+    ],
+    "sourceUrl": "https://brewbuch.com/different-types-of-tea/",
+    "basePrice": 599,
+    "weightOptions": [
+      {
+        "grams": 100,
+        "label": "100g",
+        "price": 599
+      },
+      {
+        "grams": 500,
+        "label": "500g",
+        "price": 2799.0
+      },
+      {
+        "grams": 1000,
+        "label": "1000g",
+        "price": 5199.0
+      },
+      {
+        "grams": 1500,
+        "label": "1500g",
+        "price": 7499.0
+      }
+    ]
+  },
+  {
+    "id": 13,
+    "slug": "yellow-tea",
+    "title": "Yellow Tea",
+    "origin": "China",
+    "type": "Lightly Fermented Tea",
+    "weight": "100g",
+    "price": 699,
+    "currency": "INR",
+    "img": "https://brewbuch.com/wp-content/uploads/2023/05/types-of-tea.jpg",
+    "imgAlt": "A variety of tea leaves photographed for the BrewBuch tea guide",
+    "tag": "Rare",
+    "featured": false,
+    "description": "A mellow Chinese tea with a richer cup than white tea and softer edge than green.",
+    "notes": [
+      "Mellow",
+      "Golden",
+      "Rounded"
+    ],
+    "sourceUrl": "https://brewbuch.com/different-types-of-tea/",
+    "basePrice": 699,
+    "weightOptions": [
+      {
+        "grams": 100,
+        "label": "100g",
+        "price": 699
+      },
+      {
+        "grams": 500,
+        "label": "500g",
+        "price": 3299.0
+      },
+      {
+        "grams": 1000,
+        "label": "1000g",
+        "price": 6099.0
+      },
+      {
+        "grams": 1500,
+        "label": "1500g",
+        "price": 8699.0
+      }
+    ]
+  },
+  {
+    "id": 14,
+    "slug": "breakfast-tea",
+    "title": "Breakfast Tea",
+    "origin": "Assam, Ceylon, and Africa",
+    "type": "Black Tea Blend",
+    "weight": "100g",
+    "price": 319,
+    "currency": "INR",
+    "img": "https://brewbuch.com/wp-content/uploads/2023/05/Breakfast-Tea-1024x683.jpg",
+    "imgAlt": "Breakfast tea on a bed",
+    "tag": "Morning",
+    "featured": false,
+    "description": "A brisk black tea blend made to steep quickly and hold milk beautifully.",
+    "notes": [
+      "Brisk",
+      "Full-bodied",
+      "Cream ready"
+    ],
+    "sourceUrl": "https://brewbuch.com/different-types-of-tea/",
+    "basePrice": 319,
+    "weightOptions": [
+      {
+        "grams": 100,
+        "label": "100g",
+        "price": 319
+      },
+      {
+        "grams": 500,
+        "label": "500g",
+        "price": 1499.0
+      },
+      {
+        "grams": 1000,
+        "label": "1000g",
+        "price": 2799.0
+      },
+      {
+        "grams": 1500,
+        "label": "1500g",
+        "price": 3999.0
+      }
+    ]
+  },
+  {
+    "id": 15,
+    "slug": "chai-tea",
+    "title": "Chai Tea",
+    "origin": "India",
+    "type": "Spiced Black Tea",
+    "weight": "100g",
+    "price": 349,
+    "currency": "INR",
+    "img": "https://brewbuch.com/wp-content/uploads/2023/05/Chai-tea-1024x683.jpg",
+    "imgAlt": "Chai tea spices and black tea on a white background",
+    "tag": "Spiced",
+    "featured": false,
+    "description": "A spiced black tea with ginger, cinnamon, cardamom, and clove warmth.",
+    "notes": [
+      "Ginger",
+      "Cardamom",
+      "Cinnamon"
+    ],
+    "sourceUrl": "https://brewbuch.com/different-types-of-tea/",
+    "basePrice": 349,
+    "weightOptions": [
+      {
+        "grams": 100,
+        "label": "100g",
+        "price": 349
+      },
+      {
+        "grams": 500,
+        "label": "500g",
+        "price": 1699.0
+      },
+      {
+        "grams": 1000,
+        "label": "1000g",
+        "price": 3099.0
+      },
+      {
+        "grams": 1500,
+        "label": "1500g",
+        "price": 4399.0
+      }
+    ]
+  },
+  {
+    "id": 99,
+    "slug": "archive-collection-box",
+    "title": "The Archive Collection Box",
+    "origin": "Three Estate Edit",
+    "type": "Gift Collection",
+    "weight": "3 x 80g",
+    "price": 4999,
+    "currency": "INR",
+    "img": "/macro_tea.png",
+    "tag": "Limited Edition",
+    "featured": true,
+    "isGift": true,
+    "description": "A presentation box with three reserve teas, a brass infuser, and a tasting journal.",
+    "notes": [
+      "Reserve edit",
+      "Brass infuser",
+      "Gift-ready"
+    ]
   }
 ]
